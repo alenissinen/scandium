@@ -1,5 +1,6 @@
 > [!IMPORTANT]
-> This project is my personal portfolio project, AI agents will be used but I won't be generating code with them. I've learned to code because I like to build things and **write** code! This also great exercise on building a scalable modern web application.  
+> This project is my personal portfolio project, AI agents will be used but I won't be generating code with them. I've learned to code because I like to build things and **write** code! This is also great exercise on building a scalable modern web application.
+> 
 > If you want to contribute something to this project, **please don't** create pull requests with completely generated code, it might be a lot more efficient and better looking, but I just feel like it doesn't belong in a portfolio project which I intend to show to my possible future employers. Thank you for understanding.
 
 # Scandium
