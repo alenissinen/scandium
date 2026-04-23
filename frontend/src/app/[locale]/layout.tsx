@@ -2,7 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Providers } from "@/components/providers";
 import "../globals.css";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import "@fontsource/geist-sans/400.css";
 import "@fontsource/geist-sans/700.css";
 

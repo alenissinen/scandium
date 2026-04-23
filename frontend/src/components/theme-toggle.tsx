@@ -1,9 +1,9 @@
 "use client";
 
-import { useTheme } from '@teispace/next-themes';
+import { useTheme } from "@teispace/next-themes";
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@config "./../../tailwind.config.ts";
 
 @theme {
   --color-background: var(--background);
@@ -76,5 +75,10 @@
   body {
     @apply font-sans antialiased;
     @apply bg-background text-foreground;
+  }
+
+  button,
+  a {
+    cursor: pointer;
   }
 }

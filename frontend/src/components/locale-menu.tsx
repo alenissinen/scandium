@@ -1,16 +1,16 @@
 "use client";
 
+import { Globe } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
-import { locales, type Locale } from "@/i18n/request";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Globe } from "lucide-react";
+import { type Locale, locales } from "@/i18n/request";
 
 export function LocaleMenu() {
   const locale = useLocale();
