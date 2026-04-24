@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    frontend-check:
+      root: "frontend/"
+      run: npx biome check .
+      glob: "*.{ts,tsx,js,jsx,json}"
+    rust-clippy:
+      root: "."
+      run: cargo clippy -- -D warnings
+      glob: "*.rs"
+    rust-fmt:
+      root: "."
+      run: cargo fmt --check
+      glob: "*.rs"
+
+pre-push:
+  commands:
+    rust-check:
+      run: cargo check

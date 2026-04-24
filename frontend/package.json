@@ -8,7 +8,8 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "postinstall": "lefthook install"
   },
   "dependencies": {
     "@fontsource/geist-sans": "^5.2.5",
@@ -35,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "lefthook": "^2.1.6",
     "tailwindcss": "^4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5"
