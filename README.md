@@ -31,29 +31,26 @@ Scandium (named after the chemical element) is a modern customer-to-customer mar
 | `crates/shared`         | Shared types, errors, pagination                |
 | `frontend/`             | Next.js frontend                                |
 
+## Development setup
+
 ### Prerequisites
 
 - Rust (latest stable)
 - Docker + Docker Compose
-- Node.js 24+
 
-### Run infrastructure
-
+### Setup
 ```bash
 docker-compose up -d
+sqlx migrate run
 ```
 
-### Run backend
-
+### Run api
 ```bash
 cargo run -p api
 ```
 
-### Run frontend
-
-```bash
-cd frontend && npm run dev
-```
+### Git hooks
+Git hooks are managed via lefthook. Rust hooks (clippy, fmt) run automatically on commit. See more in [frontend README](frontend/README.md)
 
 ## License
 
