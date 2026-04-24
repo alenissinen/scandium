@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { type Locale, locales } from "@/i18n/request";
+import { routing } from "@/i18n/routing";
 
 export function LocaleMenu() {
   const locale = useLocale();
@@ -22,7 +22,7 @@ export function LocaleMenu() {
   const tNav = useTranslations("nav");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  function switchLocale(next: Locale) {
+  function switchLocale(next: string) {
     const segments = pathName.split("/");
     segments[1] = next;
     router.push(segments.join("/"));
@@ -41,7 +41,7 @@ export function LocaleMenu() {
         <TooltipContent>{tNav("language")}</TooltipContent>
       </Tooltip>
       <DropdownMenuContent align="end">
-        {locales.map((language) => (
+        {routing.locales.map((language) => (
           <DropdownMenuItem
             key={language}
             onClick={() => switchLocale(language)}

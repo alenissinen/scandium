@@ -8,5 +8,21 @@
   "language": {
     "fi": "Suomi",
     "en": "English"
+  },
+  "auth": {
+    "back": "Takaisin etusivulle",
+    "login": "Kirjaudu",
+    "register": "Rekisteröidy",
+    "emailOrUsername": "Sähköposti tai käyttäjänimi",
+    "fullName": "Koko nimi",
+    "fullNamePlaceholder": "Erkki Esimerkki",
+    "email": "Sähköposti",
+    "emailPlaceholder": "erkki@esimerkki.fi",
+    "username": "Käyttäjänimi",
+    "usernamePlaceholder": "käyttäjänimi",
+    "password": "Salasana",
+    "passwordPlaceholder": "tosisalainensana",
+    "continueWithGoogle": "Kirjaudu Google-tilillä",
+    "continueWithGithub": "Kirjaudu Github-tilillä"
   }
 }

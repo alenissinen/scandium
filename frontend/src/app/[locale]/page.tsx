@@ -1,5 +1,10 @@
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/navbar/navbar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
-export default function Home() {
-  return <Navbar></Navbar>;
+export default function HomePage() {
+  return (
+    <TooltipProvider>
+      <Navbar />
+    </TooltipProvider>
+  );
 }

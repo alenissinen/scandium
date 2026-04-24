@@ -8,5 +8,21 @@
   "language": {
     "fi": "Suomi",
     "en": "English"
+  },
+  "auth": {
+    "back": "Back to front page",
+    "login": "Login",
+    "register": "Register",
+    "emailOrUsername": "Email or username",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "johndoe@example.com",
+    "username": "Username",
+    "usernamePlaceholder": "username",
+    "password": "Password",
+    "passwordPlaceholder": "verysecretword",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub"
   }
 }
