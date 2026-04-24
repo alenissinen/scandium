@@ -1,6 +1,9 @@
 {
   "nav": {
-    "login": "Login"
+    "login": "Login",
+    "language": "Change language",
+    "themeDark": "Switch to light theme",
+    "themeLight": "Switch to dark theme"
   },
   "language": {
     "fi": "Suomi",

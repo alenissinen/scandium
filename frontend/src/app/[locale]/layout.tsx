@@ -5,6 +5,7 @@ import "../globals.css";
 import type { Metadata } from "next";
 import "@fontsource/geist-sans/400.css";
 import "@fontsource/geist-sans/700.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "Scandium",
@@ -25,7 +26,9 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <TooltipProvider>{children}</TooltipProvider>
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,6 +1,9 @@
 {
   "nav": {
-    "login": "Kirjaudu"
+    "login": "Kirjaudu",
+    "language": "Vaihda kieltä",
+    "themeDark": "Vaihda vaaleaan tilaan",
+    "themeLight": "Vaihda tummaan tilaan"
   },
   "language": {
     "fi": "Suomi",

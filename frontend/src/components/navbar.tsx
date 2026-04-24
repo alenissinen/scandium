@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { LocaleMenu } from "@/components/locale-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export function Navbar() {
   const t = useTranslations("nav");
@@ -24,13 +25,13 @@ export function Navbar() {
         <div className="ml-auto flex items-center">
           <LocaleMenu />
           <ThemeToggle />
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             onClick={() => {}}
-            className="text-sm font-bold text-foreground hover:text-muted-foreground transition-colors px-2.5"
+            className="text-base text-foreground transition-colors px-2.5"
           >
             {t("login")}
-          </button>
+          </Button>
         </div>
       </div>
     </nav>
