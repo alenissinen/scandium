@@ -1,7 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,9 @@ import { Label } from "@/components/ui/label";
 
 type AuthMode = "login" | "register";
 type ActionState = { error?: string; success?: boolean } | null;
+type AuthFormProps = {
+  modal?: boolean;
+};
 
 async function loginAction(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   const requestBody = {
@@ -47,15 +51,27 @@ async function registerAction(_prevState: ActionState, formData: FormData): Prom
   return { success: true };
 }
 
-export function AuthForm() {
+export function AuthForm({ modal }: AuthFormProps) {
   const [mode, setMode] = useState<AuthMode>("login");
   const t = useTranslations("auth");
+  const router = useRouter();
 
   const [loginState, loginFormAction, isLoginPending] = useActionState(loginAction, null);
   const [registerState, registerFormAction, isRegisterPending] = useActionState(
     registerAction,
     null
   );
+
+  // Redirect/close modal on successful login/register
+  useEffect(() => {
+    if (loginState?.success || registerState?.success) {
+      if (modal) {
+        router.back();
+      } else {
+        router.push("/");
+      }
+    }
+  }, [loginState, registerState, router, modal]);
 
   return (
     <div className="flex flex-col gap-6 w-full">
