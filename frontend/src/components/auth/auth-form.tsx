@@ -66,13 +66,13 @@ export function AuthForm() {
         /* Login form */
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="email">{t("emailOrUsername")}</Label>
-            <Input id="email" type="email" placeholder={t("emailPlaceholder")} />
+            <Label htmlFor="emailOrUsername">{t("emailOrUsername")}</Label>
+            <Input id="emailOrUsername" type="text" />
           </div>
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="password">{t("password")}</Label>
-            <Input id="password" type="password" placeholder={t("passwordPlaceholder")} />
+            <Input id="password" type="password" />
           </div>
         </div>
       )}
