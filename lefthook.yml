@@ -8,11 +8,11 @@ pre-commit:
     rust-clippy:
       root: "."
       run: cargo clippy -- -D warnings
-      glob: "*.rs"
+      glob: "**/*.rs"
     rust-fmt:
       root: "."
       run: cargo fmt --check
-      glob: "*.rs"
+      glob: "**/*.rs"
 
 pre-push:
   commands:
