@@ -14,9 +14,10 @@ Use cases that combine domain logic and infrastructure.
 
 ## Modules
 
-| Module      | Description                        |
-| ----------- | ---------------------------------- |
-| `listing`   | CreateListing, UpdateListing, etc. |
-| `user`      | RegisterUser, LoginUser, etc.      |
-| `search`    | SearchListings, GetFilters, etc.   |
-| `messaging` | SendMessage, GetConversation, etc. |
+| Module      | Description                    |
+| ----------- | ------------------------------ |
+| `listing`   | Listing related methods        |
+| `user`      | User related methods           |
+| `search`    | Listing search related methods |
+| `messaging` | Chat related methods           |
+| `auth`      | Auth related methods           |
