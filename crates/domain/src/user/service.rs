@@ -17,4 +17,5 @@ pub trait UserRepository: Send + Sync {
     async fn find_by_id(&self, id: Uuid) -> Result<User, UserError>;
     async fn find_by_email(&self, email: &str) -> Result<User, UserError>;
     async fn find_by_username(&self, username: &str) -> Result<User, UserError>;
+    async fn find_by_username_or_email(&self, handle: &str) -> Result<User, UserError>;
 }

@@ -17,7 +17,7 @@ type AuthFormProps = {
 
 async function loginAction(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   const requestBody = {
-    loginHandle: formData.get("emailOrUsername") as string,
+    login_handle: formData.get("emailOrUsername") as string,
     password: formData.get("password") as string,
   };
 
@@ -28,7 +28,11 @@ async function loginAction(_prevState: ActionState, formData: FormData): Promise
     body: JSON.stringify(requestBody),
   });
 
-  if (!response.ok) return { error: "Login failed" };
+  if (!response.ok) {
+    const data = await response.json();
+    return { error: data.error ?? "Something went wrong" };
+  }
+
   return { success: true };
 }
 
@@ -47,7 +51,11 @@ async function registerAction(_prevState: ActionState, formData: FormData): Prom
     body: JSON.stringify(requestBody),
   });
 
-  if (!response.ok) return { error: `Registration failed: ${response.status}` };
+  if (!response.ok) {
+    const data = await response.json();
+    return { error: data.error ?? "Something went wrong" };
+  }
+
   return { success: true };
 }
 

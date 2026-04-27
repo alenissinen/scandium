@@ -1,9 +1,11 @@
 use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
+use infrastructure::jwt::JwtService;
 use serde::{Deserialize, Serialize};
 
-use application::auth::register::RegisterRequest;
+use application::auth::{login::LoginRequest, register::RegisterRequest};
 use domain::user::entity::PublicUser;
+use sqlx::types::Uuid;
 
 use crate::{errors::ApiError, state::AppState};
 
@@ -13,6 +15,12 @@ pub struct RegisterBody {
     pub username: String,
     pub password: String,
     pub display_name: String,
+}
+
+#[derive(Deserialize)]
+pub struct LoginBody {
+    pub login_handle: String,
+    pub password: String
 }
 
 #[derive(Serialize)]
@@ -31,14 +39,32 @@ pub async fn register(
         display_name: body.display_name,
     }).await?;
 
-    let access_token = state.auth.jwt
-        .create_access_token(user.id)
+    let jar = create_auth_tokens(&state.auth.jwt, user.id)?;
+
+    Ok((StatusCode::CREATED, jar, Json(AuthResponse { user: user.into() })))
+}
+
+pub async fn login(State(state): State<AppState>, Json(body): Json<LoginBody>) -> Result<impl IntoResponse, ApiError> {
+    let user = state.auth.login.execute(LoginRequest {
+        login_handle: body.login_handle,
+        password: body.password
+    }).await?;
+
+    let jar = create_auth_tokens(&state.auth.jwt, user.id)?;
+
+    Ok((StatusCode::OK, jar, Json(AuthResponse { user: user.into()})))
+}
+
+// Creates JWT tokens and returns jar with both tokens as cookies
+fn create_auth_tokens(jwt: &JwtService, user_id: Uuid) -> Result<CookieJar, ApiError> {
+    let access_token = jwt
+        .create_access_token(user_id)
         .map_err(|e| ApiError::Internal(e.to_string()))?;
 
-    let refresh_token = state.auth.jwt
-        .create_refresh_token(user.id)
+    let refresh_token = jwt
+        .create_refresh_token(user_id)
         .map_err(|e| ApiError::Internal(e.to_string()))?;
-    
+
     // TODO: add some type of environment variable to detect dev/prod build instead of debug_assertations
     #[cfg(debug_assertions)]
     let secure = false;
@@ -46,24 +72,19 @@ pub async fn register(
     #[cfg(not(debug_assertions))]
     let secure = true;
 
-    let access_cookie = Cookie::build(("access_token", access_token))
-        .http_only(true)
-        .same_site(SameSite::Lax)
-        .path("/")
-        .secure(secure)
-        .build();
-
-    let refresh_cookie = Cookie::build(("refresh_token", refresh_token))
-        .http_only(true)
-        .same_site(SameSite::Lax)
-        .path("/api/v1/auth/refresh")
-        .secure(secure)
-        .build();
-
-
     let jar = CookieJar::new()
-        .add(access_cookie)
-        .add(refresh_cookie);
+        .add(Cookie::build(("access_token", access_token))
+            .http_only(true)
+            .same_site(SameSite::Lax)
+            .path("/")
+            .secure(secure)
+            .build())
+        .add(Cookie::build(("refresh_token", refresh_token))
+            .http_only(true)
+            .same_site(SameSite::Lax)
+            .path("/api/v1/auth/refresh")
+            .secure(secure)
+            .build());
 
-    Ok((StatusCode::CREATED, jar, Json(AuthResponse { user: user.into() })))
+    Ok(jar)
 }

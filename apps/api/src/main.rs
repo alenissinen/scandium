@@ -4,7 +4,7 @@ mod state;
 
 use std::sync::Arc;
 
-use application::{auth::register::RegisterUseCase, user::get_user::GetUserUseCase};
+use application::{auth::{login::LoginUseCase, register::RegisterUseCase}, user::get_user::GetUserUseCase};
 use axum::{
     Router, http::{HeaderValue, Method, header::{AUTHORIZATION, CONTENT_TYPE}}, routing::{get, post}
 };
@@ -57,6 +57,7 @@ async fn main() {
     let state = AppState {
         auth: Arc::new(AuthContainer {
             register: RegisterUseCase::new(user_repository.clone()),
+            login: LoginUseCase::new(user_repository.clone()),
             jwt: JwtService::new(&jwt_secret)
         }),
         users: Arc::new(UserContainer {
@@ -74,6 +75,7 @@ async fn main() {
     // Create v1 api router
     let v1: Router<AppState> = Router::new()
         .route("/auth/register", post(routes::auth::register))
+        .route("/auth/login", post(routes::auth::login))
         .route("/users/{id}", get(routes::users::get_user));
 
     // Build axum application

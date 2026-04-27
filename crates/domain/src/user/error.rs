@@ -28,4 +28,7 @@ pub enum UserError {
 
     #[error("Infrastructure error: {0}")]
     Infrastructure(String),
+
+    #[error("Invalid credentials")]
+    InvalidCredentials
 }

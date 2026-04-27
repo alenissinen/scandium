@@ -28,6 +28,7 @@ impl IntoResponse for ApiError {
                 | UserError::UsernameTooShort
                 | UserError::PasswordTooShort => (StatusCode::UNPROCESSABLE_ENTITY, e.to_string()),
                 UserError::AccountDeactivated => (StatusCode::FORBIDDEN, e.to_string()),
+                UserError::InvalidCredentials => (StatusCode::UNAUTHORIZED, e.to_string()),
                 UserError::Infrastructure(e) => {
                     tracing::error!("Infrastructure error: {}", e);
                     (

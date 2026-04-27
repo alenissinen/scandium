@@ -152,4 +152,25 @@ impl UserRepository for PgUserRepository {
 
         Ok(row.into())
     }
+
+    async fn find_by_username_or_email(&self, handle: &str) -> Result<User, UserError> {
+        let row = sqlx::query_as!(
+            UserRow,
+            r#"
+            SELECT
+                id, email, username, display_name, password_hash, 
+                avatar_url, location, phone, is_verified, is_active,
+                role::text as "role!", created_at, updated_at
+            FROM users
+            WHERE username = $1 OR email = $1
+            "#,
+            handle
+        )
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|e| UserError::Infrastructure(e.to_string()))?
+        .ok_or(UserError::NotFound(handle.to_string()))?;
+
+        Ok(row.into())
+    }
 }

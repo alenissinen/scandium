@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use application::{auth::register::RegisterUseCase, user::get_user::GetUserUseCase};
+use application::{auth::{login::LoginUseCase, register::RegisterUseCase}, user::get_user::GetUserUseCase};
 use infrastructure::jwt::JwtService;
 
 #[derive(Clone)]
@@ -12,6 +12,7 @@ pub struct AppState {
 #[derive(Clone)]
 pub struct AuthContainer {
     pub register: RegisterUseCase,
+    pub login: LoginUseCase,
     pub jwt: JwtService
 }
 
