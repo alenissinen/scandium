@@ -1,5 +1,5 @@
 use chrono::{Duration, Utc};
-use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -24,7 +24,10 @@ impl JwtService {
         }
     }
 
-    pub fn create_access_token(&self, user_id: Uuid) -> Result<String, jsonwebtoken::errors::Error> {
+    pub fn create_access_token(
+        &self,
+        user_id: Uuid,
+    ) -> Result<String, jsonwebtoken::errors::Error> {
         let now = Utc::now();
         let claims = Claims {
             sub: user_id.to_string(),
@@ -34,7 +37,10 @@ impl JwtService {
         encode(&Header::default(), &claims, &self.encoding_key)
     }
 
-    pub fn create_refresh_token(&self, user_id: Uuid) -> Result<String, jsonwebtoken::errors::Error> {
+    pub fn create_refresh_token(
+        &self,
+        user_id: Uuid,
+    ) -> Result<String, jsonwebtoken::errors::Error> {
         let now = Utc::now();
         let claims = Claims {
             sub: user_id.to_string(),

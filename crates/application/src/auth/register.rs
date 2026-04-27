@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use argon2::{
-    password_hash::{rand_core::OsRng, PasswordHasher, SaltString},
     Argon2,
+    password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
 };
 use domain::user::{
     entity::User,
@@ -32,7 +32,11 @@ impl RegisterUseCase {
             return Err(UserError::InvalidEmail);
         }
 
-        if !req.username.chars().all(|c| c.is_alphanumeric() || c == '_') {
+        if !req
+            .username
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == '_')
+        {
             return Err(UserError::InvalidUsername);
         }
 
@@ -50,12 +54,15 @@ impl RegisterUseCase {
             .map_err(|e| UserError::Infrastructure(e.to_string()))?
             .to_string();
 
-        let user = self.user_repo.create(CreateUserInput {
-            email: req.email,
-            username: req.username,
-            password_hash,
-            display_name: req.display_name,
-        }).await?;
+        let user = self
+            .user_repo
+            .create(CreateUserInput {
+                email: req.email,
+                username: req.username,
+                password_hash,
+                display_name: req.display_name,
+            })
+            .await?;
 
         tracing::info!(user_id = %user.id, username = %user.username, "New user created");
 

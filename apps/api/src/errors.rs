@@ -8,7 +8,7 @@ use serde_json::json;
 
 pub enum ApiError {
     User(UserError),
-    Internal(String)
+    Internal(String),
 }
 
 impl IntoResponse for ApiError {
@@ -16,7 +16,10 @@ impl IntoResponse for ApiError {
         let (status, message) = match self {
             ApiError::Internal(e) => {
                 tracing::error!("Internal error: {}", e);
-                (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error".to_string())
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "Internal server error".to_string(),
+                )
             }
             ApiError::User(e) => match e {
                 UserError::NotFound(_) => (StatusCode::NOT_FOUND, e.to_string()),

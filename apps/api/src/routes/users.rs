@@ -1,6 +1,6 @@
 use axum::{
     Json,
-    extract::{Path, State}
+    extract::{Path, State},
 };
 use domain::user::entity::PublicUser;
 use sqlx::types::Uuid;

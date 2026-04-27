@@ -6,11 +6,13 @@ pre-commit:
       run: npx biome check .
       glob: "*.{ts,tsx,js,jsx,json}"
     rust-clippy:
-      root: "."
       run: cargo clippy -- -D warnings
+      files: git diff --cached --name-only --diff-filter=ACMR
+      glob: "*.rs"
     rust-fmt:
-      root: "."
       run: cargo fmt --check
+      files: git diff --cached --name-only --diff-filter=ACMR
+      glob: "*.rs"
 
 pre-push:
   commands:

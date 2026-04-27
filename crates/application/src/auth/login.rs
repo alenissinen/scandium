@@ -19,12 +19,18 @@ impl LoginUseCase {
     }
 
     pub async fn execute(&self, req: LoginRequest) -> Result<User, UserError> {
-        let user = self.user_repo.find_by_username_or_email(&req.login_handle).await?;
+        let user = self
+            .user_repo
+            .find_by_username_or_email(&req.login_handle)
+            .await?;
 
         let parsed_hash = PasswordHash::new(&user.password_hash)
             .map_err(|e| UserError::Infrastructure(e.to_string()))?;
 
-        if Argon2::default().verify_password(req.password.as_bytes(), &parsed_hash).is_err() {
+        if Argon2::default()
+            .verify_password(req.password.as_bytes(), &parsed_hash)
+            .is_err()
+        {
             return Err(UserError::InvalidCredentials);
         }
 

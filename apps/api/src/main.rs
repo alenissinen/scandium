@@ -4,14 +4,22 @@ mod state;
 
 use std::sync::Arc;
 
-use application::{auth::{login::LoginUseCase, register::RegisterUseCase}, user::get_user::GetUserUseCase};
+use application::{
+    auth::{login::LoginUseCase, register::RegisterUseCase},
+    user::get_user::GetUserUseCase,
+};
 use axum::{
-    Router, http::{HeaderValue, Method, header::{AUTHORIZATION, CONTENT_TYPE}}, routing::{get, post}
+    Router,
+    http::{
+        HeaderValue, Method,
+        header::{AUTHORIZATION, CONTENT_TYPE},
+    },
+    routing::{get, post},
 };
 use infrastructure::{jwt::JwtService, postgres::user_repository::PgUserRepository};
 use jsonwebtoken::crypto::aws_lc;
 use sqlx::postgres::PgPoolOptions;
-use tower_http::{cors::{CorsLayer}, trace::TraceLayer};
+use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::EnvFilter;
 
 use routes::health::health_check;
@@ -37,8 +45,8 @@ async fn main() {
     let database_url =
         std::env::var("DATABASE_URL").expect("DATABASE_URL env variable must be set");
     let jwt_secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
-    let allowed_origin = std::env::var("ALLOWED_ORIGIN")
-        .unwrap_or_else(|_| "http://localhost:3000".to_string());
+    let allowed_origin =
+        std::env::var("ALLOWED_ORIGIN").unwrap_or_else(|_| "http://localhost:3000".to_string());
     let host = std::env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
     let port = std::env::var("PORT").unwrap_or_else(|_| "3001".to_string());
 
@@ -58,11 +66,11 @@ async fn main() {
         auth: Arc::new(AuthContainer {
             register: RegisterUseCase::new(user_repository.clone()),
             login: LoginUseCase::new(user_repository.clone()),
-            jwt: JwtService::new(&jwt_secret)
+            jwt: JwtService::new(&jwt_secret),
         }),
         users: Arc::new(UserContainer {
-            get: GetUserUseCase::new(user_repository.clone())
-        })
+            get: GetUserUseCase::new(user_repository.clone()),
+        }),
     };
 
     // Cors rules

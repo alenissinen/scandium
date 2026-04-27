@@ -30,5 +30,5 @@ pub enum UserError {
     Infrastructure(String),
 
     #[error("Invalid credentials")]
-    InvalidCredentials
+    InvalidCredentials,
 }
