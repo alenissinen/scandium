@@ -3,7 +3,7 @@ pre-commit:
   commands:
     frontend-check:
       root: "frontend/"
-      run: npx biome check .
+      run: npx biome check --fix . && git add -u
       glob: "*.{ts,tsx,js,jsx,json}"
     rust-clippy:
       run: cargo clippy -- -D warnings

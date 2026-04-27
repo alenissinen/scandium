@@ -3,7 +3,8 @@
     "login": "Kirjaudu",
     "language": "Vaihda kieltä",
     "themeDark": "Vaihda vaaleaan tilaan",
-    "themeLight": "Vaihda tummaan tilaan"
+    "themeLight": "Vaihda tummaan tilaan",
+    "profile": "Profiili"
   },
   "language": {
     "fi": "Suomi",

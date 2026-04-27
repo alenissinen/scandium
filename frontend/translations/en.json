@@ -3,7 +3,8 @@
     "login": "Login",
     "language": "Change language",
     "themeDark": "Switch to light theme",
-    "themeLight": "Switch to dark theme"
+    "themeLight": "Switch to dark theme",
+    "profile": "Profile"
   },
   "language": {
     "fi": "Suomi",

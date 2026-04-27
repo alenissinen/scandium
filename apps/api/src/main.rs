@@ -1,4 +1,5 @@
 mod errors;
+mod middleware;
 mod routes;
 mod state;
 
@@ -24,7 +25,10 @@ use tracing_subscriber::EnvFilter;
 
 use routes::health::health_check;
 
-use crate::state::{AppState, AuthContainer, UserContainer};
+use crate::{
+    middleware::auth::jwt_auth_middleware,
+    state::{AppState, AuthContainer, UserContainer},
+};
 
 #[tokio::main]
 async fn main() {
@@ -80,11 +84,20 @@ async fn main() {
         .allow_headers([CONTENT_TYPE, AUTHORIZATION])
         .allow_credentials(true);
 
+    // Create router with jwt auth middleware
+    let protected: Router<AppState> = Router::new()
+        .route("/auth/me", get(routes::auth::me))
+        .layer(axum::middleware::from_fn_with_state(
+            state.clone(),
+            jwt_auth_middleware,
+        ));
+
     // Create v1 api router
     let v1: Router<AppState> = Router::new()
         .route("/auth/register", post(routes::auth::register))
         .route("/auth/login", post(routes::auth::login))
-        .route("/users/{id}", get(routes::users::get_user));
+        .route("/users/{id}", get(routes::users::get_user))
+        .merge(protected);
 
     // Build axum application
     let app: Router = Router::new()

@@ -1,11 +1,27 @@
+"use client";
+
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import { AuthForm } from "@/components/auth/auth-form";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/contexts/user-context";
 import { Link } from "@/i18n/navigation";
 
 export default function AuthPage() {
   const t = useTranslations("auth");
+  const { user } = useUser();
+  const router = useRouter();
+
+  // Redirect user to front page if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
+  if (user) return null;
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-4">

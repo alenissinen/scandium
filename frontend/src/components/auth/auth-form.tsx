@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/contexts/user-context";
 
 type AuthMode = "login" | "register";
 type ActionState = { error?: string; success?: boolean } | null;
@@ -63,6 +64,7 @@ export function AuthForm({ modal }: AuthFormProps) {
   const [mode, setMode] = useState<AuthMode>("login");
   const t = useTranslations("auth");
   const router = useRouter();
+  const { refreshUser } = useUser();
 
   const [loginState, loginFormAction, isLoginPending] = useActionState(loginAction, null);
   const [registerState, registerFormAction, isRegisterPending] = useActionState(
@@ -73,13 +75,14 @@ export function AuthForm({ modal }: AuthFormProps) {
   // Redirect/close modal on successful login/register
   useEffect(() => {
     if (loginState?.success || registerState?.success) {
+      refreshUser();
       if (modal) {
         router.back();
       } else {
         router.push("/");
       }
     }
-  }, [loginState, registerState, router, modal]);
+  }, [loginState, registerState, router, modal, refreshUser]);
 
   return (
     <div className="flex flex-col gap-6 w-full">

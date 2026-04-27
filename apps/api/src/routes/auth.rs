@@ -1,4 +1,4 @@
-use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
+use axum::{Extension, Json, extract::State, http::StatusCode, response::IntoResponse};
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use infrastructure::jwt::JwtService;
 use serde::{Deserialize, Serialize};
@@ -7,7 +7,7 @@ use application::auth::{login::LoginRequest, register::RegisterRequest};
 use domain::user::entity::PublicUser;
 use sqlx::types::Uuid;
 
-use crate::{errors::ApiError, state::AppState};
+use crate::{errors::ApiError, middleware::auth::AuthenticatedUser, state::AppState};
 
 #[derive(Deserialize)]
 pub struct RegisterBody {
@@ -72,6 +72,14 @@ pub async fn login(
         jar,
         Json(AuthResponse { user: user.into() }),
     ))
+}
+
+pub async fn me(
+    State(state): State<AppState>,
+    Extension(auth_user): Extension<AuthenticatedUser>,
+) -> Result<impl IntoResponse, ApiError> {
+    let user = state.users.get.execute(auth_user.user_id).await?;
+    Ok(Json(PublicUser::from(user)))
 }
 
 // Creates JWT tokens and returns jar with both tokens as cookies
