@@ -14,5 +14,5 @@ pub async fn get_user(
 ) -> Result<Json<PublicUser>, ApiError> {
     let user = state.users.get.execute(id).await?;
 
-    Ok(Json(user.into()) )
+    Ok(Json(user.into()))
 }
