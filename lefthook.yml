@@ -6,7 +6,7 @@ pre-commit:
       run: npx biome check .
       glob: "*.{ts,tsx,js,jsx,json}"
     rust-clippy:
-      run: cargo clippy -- -D warnings
+      run: cargo clippy --workspace -- -D warnings
       files: git diff --cached --name-only --diff-filter=ACMR
       glob: "*.rs"
     rust-fmt:
@@ -17,4 +17,4 @@ pre-commit:
 pre-push:
   commands:
     rust-check:
-      run: cargo check
+      run: cargo check --workspace
