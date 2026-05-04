@@ -3,7 +3,9 @@ use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use infrastructure::jwt::JwtService;
 use serde::{Deserialize, Serialize};
 
-use application::auth::{login::LoginRequest, register::RegisterRequest};
+use application::auth::{
+    forgot_password::ForgotPasswordRequest, login::LoginRequest, register::RegisterRequest,
+};
 use domain::user::entity::PublicUser;
 use sqlx::types::Uuid;
 
@@ -21,6 +23,11 @@ pub struct RegisterBody {
 pub struct LoginBody {
     pub login_handle: String,
     pub password: String,
+}
+
+#[derive(Deserialize)]
+pub struct ForgotPasswordBody {
+    pub email: String,
 }
 
 #[derive(Serialize)]
@@ -118,4 +125,17 @@ fn create_auth_tokens(jwt: &JwtService, user_id: Uuid) -> Result<CookieJar, ApiE
         );
 
     Ok(jar)
+}
+
+pub async fn forgot_password(
+    State(state): State<AppState>,
+    Json(body): Json<ForgotPasswordBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    state
+        .auth
+        .forgot_password
+        .execute(ForgotPasswordRequest { email: body.email })
+        .await?;
+
+    Ok(StatusCode::OK)
 }

@@ -6,7 +6,9 @@ mod state;
 use std::sync::Arc;
 
 use application::{
-    auth::{login::LoginUseCase, register::RegisterUseCase},
+    auth::{
+        forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
+    },
     user::get_user::GetUserUseCase,
 };
 use axum::{
@@ -17,7 +19,13 @@ use axum::{
     },
     routing::{get, post},
 };
-use infrastructure::{jwt::JwtService, postgres::user_repository::PgUserRepository};
+use infrastructure::{
+    email::resend::ResendEmailService,
+    jwt::JwtService,
+    postgres::{
+        password_reset_repository::PgPasswordResetRepository, user_repository::PgUserRepository,
+    },
+};
 use jsonwebtoken::crypto::aws_lc;
 use sqlx::postgres::PgPoolOptions;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
@@ -46,13 +54,16 @@ async fn main() {
         )
         .init();
 
-    let database_url =
-        std::env::var("DATABASE_URL").expect("DATABASE_URL env variable must be set");
+    // Env variables
+    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let jwt_secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
     let allowed_origin =
         std::env::var("ALLOWED_ORIGIN").unwrap_or_else(|_| "http://localhost:3000".to_string());
     let host = std::env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
     let port = std::env::var("PORT").unwrap_or_else(|_| "3001".to_string());
+    let app_url = std::env::var("APP_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
+    let app_email = std::env::var("APP_EMAIL").expect("APP_EMAIL must be set");
+    let resend_api_key = std::env::var("RESEND_API_KEY").expect("RESEND_API_KEY must be set");
 
     // Create postgres pool
     let pool = PgPoolOptions::new()
@@ -64,13 +75,21 @@ async fn main() {
     tracing::info!("Connected to database");
 
     // Dependency injection
-    let user_repository = Arc::new(PgUserRepository::new(pool));
+    let user_repository = Arc::new(PgUserRepository::new(pool.clone()));
+    let pw_reset_repository = Arc::new(PgPasswordResetRepository::new(pool.clone()));
+    let email_repository = Arc::new(ResendEmailService::new(resend_api_key, app_email));
 
     let state = AppState {
         auth: Arc::new(AuthContainer {
             register: RegisterUseCase::new(user_repository.clone()),
             login: LoginUseCase::new(user_repository.clone()),
             jwt: JwtService::new(&jwt_secret),
+            forgot_password: ForgotPasswordUseCase::new(
+                user_repository.clone(),
+                pw_reset_repository.clone(),
+                email_repository.clone(),
+                app_url,
+            ),
         }),
         users: Arc::new(UserContainer {
             get: GetUserUseCase::new(user_repository.clone()),
@@ -96,6 +115,7 @@ async fn main() {
     let v1: Router<AppState> = Router::new()
         .route("/auth/register", post(routes::auth::register))
         .route("/auth/login", post(routes::auth::login))
+        .route("/auth/forgot-password", post(routes::auth::forgot_password))
         .route("/users/{id}", get(routes::users::get_user))
         .merge(protected);
 

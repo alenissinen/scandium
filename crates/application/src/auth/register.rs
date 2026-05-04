@@ -4,10 +4,11 @@ use argon2::{
     Argon2,
     password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
 };
+
 use domain::user::{
     entity::User,
     error::UserError,
-    service::{CreateUserInput, UserRepository},
+    repository::{CreateUserInput, UserRepository},
 };
 
 pub struct RegisterRequest {

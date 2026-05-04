@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
-use domain::user::{entity::User, error::UserError, service::UserRepository};
+use domain::user::{entity::User, error::UserError, repository::UserRepository};
 
 pub struct LoginRequest {
     pub login_handle: String,

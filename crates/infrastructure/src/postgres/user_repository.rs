@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use domain::user::{
     entity::{User, UserRole},
     error::UserError,
-    service::{CreateUserInput, UserRepository},
+    repository::{CreateUserInput, UserRepository},
 };
 use sqlx::PgPool;
 use uuid::Uuid;

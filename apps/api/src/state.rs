@@ -1,7 +1,9 @@
 use std::sync::Arc;
 
 use application::{
-    auth::{login::LoginUseCase, register::RegisterUseCase},
+    auth::{
+        forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
+    },
     user::get_user::GetUserUseCase,
 };
 use infrastructure::jwt::JwtService;
@@ -17,6 +19,7 @@ pub struct AuthContainer {
     pub register: RegisterUseCase,
     pub login: LoginUseCase,
     pub jwt: JwtService,
+    pub forgot_password: ForgotPasswordUseCase,
 }
 
 pub struct UserContainer {
