@@ -20,5 +20,6 @@ Implements the repository traits defined in domain using external services.
 | --------------- | ------------------------------- |
 | `postgres`      | SQLx repository implementations |
 | `elasticsearch` | ES index management and search  |
+| `email`         | Resend implementation           |
 | `kafka`         | Producer/consumer wrappers      |
 | `redis`         | Cache, sessions, rate limiting  |

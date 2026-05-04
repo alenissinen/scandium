@@ -22,7 +22,7 @@ export default function AuthModal() {
             SCAN<span className="text-primary">DIUM</span>
           </h2>
         </div>
-        <AuthForm />
+        <AuthForm modal />
       </div>
     </div>
   );

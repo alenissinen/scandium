@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use domain::user::{
     entity::{User, UserRole},
     error::UserError,
-    service::{CreateUserInput, UserRepository},
+    repository::{CreateUserInput, UserRepository},
 };
 use sqlx::PgPool;
 use uuid::Uuid;
@@ -22,8 +22,8 @@ struct UserRow {
     id: Uuid,
     email: String,
     username: String,
-    display_name: Option<String>,
-    password_hash: Option<String>,
+    display_name: String,
+    password_hash: String,
     avatar_url: Option<String>,
     location: Option<String>,
     phone: Option<String>,
@@ -90,6 +90,23 @@ impl UserRepository for PgUserRepository {
         Ok(row.into())
     }
 
+    async fn update_password(&self, user_id: Uuid, password_hash: String) -> Result<(), UserError> {
+        sqlx::query!(
+            r#"
+            UPDATE users
+            SET password_hash = $1
+            WHERE id = $2
+            "#,
+            password_hash,
+            user_id,
+        )
+        .execute(&self.pool)
+        .await
+        .map_err(|e| UserError::Infrastructure(e.to_string()))?;
+
+        Ok(())
+    }
+
     async fn find_by_id(&self, id: Uuid) -> Result<User, UserError> {
         let row = sqlx::query_as!(
             UserRow,
@@ -153,25 +170,24 @@ impl UserRepository for PgUserRepository {
         Ok(row.into())
     }
 
-    async fn exists_by_email(&self, email: &str) -> Result<bool, UserError> {
-        let exists =
-            sqlx::query_scalar!("SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)", email)
-                .fetch_one(&self.pool)
-                .await
-                .map_err(|e| UserError::Infrastructure(e.to_string()))?;
-
-        Ok(exists.unwrap_or(false))
-    }
-
-    async fn exists_by_username(&self, username: &str) -> Result<bool, UserError> {
-        let exists = sqlx::query_scalar!(
-            "SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)",
-            username
+    async fn find_by_username_or_email(&self, handle: &str) -> Result<User, UserError> {
+        let row = sqlx::query_as!(
+            UserRow,
+            r#"
+            SELECT
+                id, email, username, display_name, password_hash, 
+                avatar_url, location, phone, is_verified, is_active,
+                role::text as "role!", created_at, updated_at
+            FROM users
+            WHERE username = $1 OR email = $1
+            "#,
+            handle
         )
-        .fetch_one(&self.pool)
+        .fetch_optional(&self.pool)
         .await
-        .map_err(|e| UserError::Infrastructure(e.to_string()))?;
+        .map_err(|e| UserError::Infrastructure(e.to_string()))?
+        .ok_or(UserError::NotFound(handle.to_string()))?;
 
-        Ok(exists.unwrap_or(false))
+        Ok(row.into())
     }
 }

@@ -3,7 +3,8 @@
     "login": "Kirjaudu",
     "language": "Vaihda kieltä",
     "themeDark": "Vaihda vaaleaan tilaan",
-    "themeLight": "Vaihda tummaan tilaan"
+    "themeLight": "Vaihda tummaan tilaan",
+    "profile": "Profiili"
   },
   "language": {
     "fi": "Suomi",
@@ -23,6 +24,17 @@
     "password": "Salasana",
     "passwordPlaceholder": "tosisalainensana",
     "continueWithGoogle": "Kirjaudu Google-tilillä",
-    "continueWithGithub": "Kirjaudu Github-tilillä"
+    "continueWithGithub": "Kirjaudu Github-tilillä",
+    "forgotPassword": "Unohditko salasanasi?",
+    "forgotPasswordDescription": "Syötä sähköpostiosoitteesi niin lähetämme sinulle palautuslinkin.",
+    "forgotPasswordSuccessTitle": "Sähköposti lähetetty.",
+    "forgotPasswordSuccessDescription": "Jos tili löytyy, saat sähköpostiin palautuslinkin.",
+    "sendResetLink": "Lähetä palautuslinkki",
+    "invalidResetLink": "Linkki on viallinen tai vanhentunut",
+    "requestNewLink": "Pyydä uusi linkki",
+    "newPassword": "Uusi salasana",
+    "resetPassword": "Vaihda salasana",
+    "resetPasswordSuccessTitle": "Salasana vaihdettu!",
+    "resetPasswordSuccessDescription": "Voit nyt kirjautua sisään uudella salasanallasi."
   }
 }

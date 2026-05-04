@@ -11,3 +11,9 @@ serde = { workspace = true }
 uuid = { workspace = true }
 chrono = { workspace = true }
 thiserror = { workspace = true }
+argon2 = { workspace = true }
+jsonwebtoken = { workspace = true }
+tracing = { workspace = true }
+rand = { workspace = true }
+hex = { workspace = true }
+sha2 = { workspace = true }

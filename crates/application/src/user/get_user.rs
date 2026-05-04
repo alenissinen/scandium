@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use domain::user::{entity::User, error::UserError, service::UserRepository};
+use domain::user::{entity::User, error::UserError, repository::UserRepository};
 use uuid::Uuid;
 
 // Use dynamic dispatch for repository type to make mock testing easier
