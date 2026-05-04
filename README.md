@@ -1,6 +1,6 @@
 > [!IMPORTANT]
 > This project is my personal portfolio project, AI (and agents) will be used but I won't be blindly generating code with them. I've learned to code because I like to build things and **write** code! This is also great exercise on building a scalable modern web application.
-> 
+>
 > If you want to contribute something to this project, **please don't** create pull requests with completely generated code, it might be a lot more efficient and better looking, but I just feel like it doesn't belong in a portfolio project which I intend to show to my possible future employers. Thank you for understanding.
 
 # Scandium
@@ -37,19 +37,58 @@ Scandium (named after the chemical element) is a modern customer-to-customer mar
 
 - Rust (latest stable)
 - Docker + Docker Compose
+- Resend.com api key
 
 ### Setup
+
 ```bash
 docker-compose up -d
 sqlx migrate run
 ```
 
-### Run api
+### Run the project
+
 ```bash
+# Start api
 cargo run -p api
+
+# Start frontend
+cd frontend && npm run dev
+```
+
+### After pulling recent changes
+
+If migrations have changed:
+
+```bash
+cargo sqlx migrate run
+```
+
+If queries have changed:
+
+```bash
+cargo sqlx prepare --workspace
+```
+
+### Before committing
+
+```bash
+# Make sure everything compiles
+cargo check --workspace
+
+# Lint
+cargo clippy --workspace -- -D warnings
+
+# Format
+cargo fmt
+
+# Lint and format frontend
+cd frontend && npm run check
+
 ```
 
 ### Git hooks
+
 Git hooks are managed via lefthook. Rust hooks (clippy, fmt) run automatically on commit. See more in [frontend README](frontend/README.md)
 
 ## License

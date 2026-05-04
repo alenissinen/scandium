@@ -18,6 +18,7 @@ Contains all business logic, entites and repository traits.
 
 | Module      | Description                                         |
 | ----------- | --------------------------------------------------- |
+| `auth`      | Password reset token entity                         |
 | `listing`   | Gear listing entity, status transitions, validation |
 | `user`      | User entity, profile                                |
 | `search`    | Search query types and filter definitions           |
