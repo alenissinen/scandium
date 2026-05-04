@@ -8,6 +8,7 @@ use std::sync::Arc;
 use application::{
     auth::{
         forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
+        reset_password::ResetPasswordUseCase, verify_reset_token::VerifyResetTokenUseCase,
     },
     user::get_user::GetUserUseCase,
 };
@@ -77,7 +78,7 @@ async fn main() {
     // Dependency injection
     let user_repository = Arc::new(PgUserRepository::new(pool.clone()));
     let pw_reset_repository = Arc::new(PgPasswordResetRepository::new(pool.clone()));
-    let email_repository = Arc::new(ResendEmailService::new(resend_api_key, app_email));
+    let email_service = Arc::new(ResendEmailService::new(resend_api_key, app_email));
 
     let state = AppState {
         auth: Arc::new(AuthContainer {
@@ -87,8 +88,13 @@ async fn main() {
             forgot_password: ForgotPasswordUseCase::new(
                 user_repository.clone(),
                 pw_reset_repository.clone(),
-                email_repository.clone(),
+                email_service.clone(),
                 app_url,
+            ),
+            verify_reset_token: VerifyResetTokenUseCase::new(pw_reset_repository.clone()),
+            reset_password: ResetPasswordUseCase::new(
+                user_repository.clone(),
+                pw_reset_repository.clone(),
             ),
         }),
         users: Arc::new(UserContainer {
@@ -116,6 +122,11 @@ async fn main() {
         .route("/auth/register", post(routes::auth::register))
         .route("/auth/login", post(routes::auth::login))
         .route("/auth/forgot-password", post(routes::auth::forgot_password))
+        .route(
+            "/auth/verify-reset-token",
+            post(routes::auth::verify_reset_token),
+        )
+        .route("/auth/reset-password", post(routes::auth::reset_password))
         .route("/users/{id}", get(routes::users::get_user))
         .merge(protected);
 

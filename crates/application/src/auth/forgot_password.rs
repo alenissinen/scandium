@@ -15,7 +15,7 @@ pub struct ForgotPasswordRequest {
 pub struct ForgotPasswordUseCase {
     user_repo: Arc<dyn UserRepository>,
     pw_reset_repo: Arc<dyn PasswordResetRepository>,
-    email_repo: Arc<dyn EmailService>,
+    email_service: Arc<dyn EmailService>,
     app_url: String,
 }
 
@@ -23,13 +23,13 @@ impl ForgotPasswordUseCase {
     pub fn new(
         user_repo: Arc<dyn UserRepository>,
         pw_reset_repo: Arc<dyn PasswordResetRepository>,
-        email_repo: Arc<dyn EmailService>,
+        email_service: Arc<dyn EmailService>,
         app_url: String,
     ) -> Self {
         Self {
             user_repo,
             pw_reset_repo,
-            email_repo,
+            email_service,
             app_url,
         }
     }
@@ -45,7 +45,7 @@ impl ForgotPasswordUseCase {
         let encoded_token = hex::encode(raw_token);
 
         // Hash raw token
-        let token_hash = hex::encode(Sha256::digest(raw_token));
+        let token_hash = hex::encode(Sha256::digest(encoded_token.as_bytes()));
 
         // Token expires in 1h
         let expires_at = Utc::now() + Duration::hours(1);
@@ -59,7 +59,7 @@ impl ForgotPasswordUseCase {
             self.app_url, encoded_token
         );
 
-        self.email_repo
+        self.email_service
             .send_password_reset(&user.email, &reset_link)
             .await?;
 

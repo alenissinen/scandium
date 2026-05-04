@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use application::auth::{
     forgot_password::ForgotPasswordRequest, login::LoginRequest, register::RegisterRequest,
+    reset_password::ResetPasswordRequest, verify_reset_token::VerifyResetTokenRequest,
 };
 use domain::user::entity::PublicUser;
 use sqlx::types::Uuid;
@@ -28,6 +29,17 @@ pub struct LoginBody {
 #[derive(Deserialize)]
 pub struct ForgotPasswordBody {
     pub email: String,
+}
+
+#[derive(Deserialize)]
+pub struct VerifyResetTokenBody {
+    pub token: String,
+}
+
+#[derive(Deserialize)]
+pub struct ResetPasswordBody {
+    pub token: String,
+    pub password: String,
 }
 
 #[derive(Serialize)]
@@ -135,6 +147,35 @@ pub async fn forgot_password(
         .auth
         .forgot_password
         .execute(ForgotPasswordRequest { email: body.email })
+        .await?;
+
+    Ok(StatusCode::OK)
+}
+
+pub async fn verify_reset_token(
+    State(state): State<AppState>,
+    Json(body): Json<VerifyResetTokenBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    state
+        .auth
+        .verify_reset_token
+        .execute(VerifyResetTokenRequest { token: body.token })
+        .await?;
+
+    Ok(StatusCode::OK)
+}
+
+pub async fn reset_password(
+    State(state): State<AppState>,
+    Json(body): Json<ResetPasswordBody>,
+) -> Result<impl IntoResponse, ApiError> {
+    state
+        .auth
+        .reset_password
+        .execute(ResetPasswordRequest {
+            token: body.token,
+            password: body.password,
+        })
         .await?;
 
     Ok(StatusCode::OK)

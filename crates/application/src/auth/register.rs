@@ -1,15 +1,11 @@
 use std::sync::Arc;
 
-use argon2::{
-    Argon2,
-    password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
-};
-
 use domain::user::{
     entity::User,
     error::UserError,
     repository::{CreateUserInput, UserRepository},
 };
+use shared::password::hash_password;
 
 pub struct RegisterRequest {
     pub email: String,
@@ -49,11 +45,7 @@ impl RegisterUseCase {
             return Err(UserError::PasswordTooShort);
         }
 
-        let salt = SaltString::generate(&mut OsRng);
-        let password_hash = Argon2::default()
-            .hash_password(req.password.as_bytes(), &salt)
-            .map_err(|e| UserError::Infrastructure(e.to_string()))?
-            .to_string();
+        let password_hash = hash_password(&req.password).map_err(UserError::Infrastructure)?;
 
         let user = self
             .user_repo

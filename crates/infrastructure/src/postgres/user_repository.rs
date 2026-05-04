@@ -90,6 +90,23 @@ impl UserRepository for PgUserRepository {
         Ok(row.into())
     }
 
+    async fn update_password(&self, user_id: Uuid, password_hash: String) -> Result<(), UserError> {
+        sqlx::query!(
+            r#"
+            UPDATE users
+            SET password_hash = $1
+            WHERE id = $2
+            "#,
+            password_hash,
+            user_id,
+        )
+        .execute(&self.pool)
+        .await
+        .map_err(|e| UserError::Infrastructure(e.to_string()))?;
+
+        Ok(())
+    }
+
     async fn find_by_id(&self, id: Uuid) -> Result<User, UserError> {
         let row = sqlx::query_as!(
             UserRow,
