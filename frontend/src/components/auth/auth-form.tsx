@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/contexts/user-context";
+import { Link } from "@/i18n/navigation";
 
 type AuthMode = "login" | "register";
 type ActionState = { error?: string; success?: boolean } | null;
@@ -62,6 +64,7 @@ async function registerAction(_prevState: ActionState, formData: FormData): Prom
 
 export function AuthForm({ modal }: AuthFormProps) {
   const [mode, setMode] = useState<AuthMode>("login");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const t = useTranslations("auth");
   const router = useRouter();
   const { refreshUser } = useUser();
@@ -122,7 +125,23 @@ export function AuthForm({ modal }: AuthFormProps) {
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="password">{t("password")}</Label>
-              <Input id="password" name="password" type="password" required />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                />
+                <Button
+                  variant="ghost"
+                  type="button"
+                  size="icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-0.5"
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -143,6 +162,14 @@ export function AuthForm({ modal }: AuthFormProps) {
               <FaGithub size={16} />
               {t("continueWithGithub")}
             </Button>
+          </div>
+          <div className="text-center">
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t("forgotPassword")}
+            </Link>
           </div>
         </form>
       )}
@@ -183,13 +210,24 @@ export function AuthForm({ modal }: AuthFormProps) {
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="password">{t("password")}</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder={t("passwordPlaceholder")}
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder={t("passwordPlaceholder")}
+                  required
+                />
+                <Button
+                  variant="ghost"
+                  type="button"
+                  size="icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-0.5"
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </Button>
+              </div>
             </div>
           </div>
 

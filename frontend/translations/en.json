@@ -24,6 +24,11 @@
     "password": "Password",
     "passwordPlaceholder": "verysecretword",
     "continueWithGoogle": "Continue with Google",
-    "continueWithGithub": "Continue with GitHub"
+    "continueWithGithub": "Continue with GitHub",
+    "forgotPassword": "Forgot your password?",
+    "forgotPasswordDescription": "Enter your email and we'll send you a password reset link.",
+    "forgotPasswordSuccessTitle": "Email sent",
+    "forgotPasswordSuccessDescription": "If an account exists, you'll receive an email.",
+    "sendResetLink": "Send reset link"
   }
 }

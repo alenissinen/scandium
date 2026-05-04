@@ -24,6 +24,11 @@
     "password": "Salasana",
     "passwordPlaceholder": "tosisalainensana",
     "continueWithGoogle": "Kirjaudu Google-tilillä",
-    "continueWithGithub": "Kirjaudu Github-tilillä"
+    "continueWithGithub": "Kirjaudu Github-tilillä",
+    "forgotPassword": "Unohditko salasanasi?",
+    "forgotPasswordDescription": "Syötä sähköpostiosoitteesi niin lähetämme sinulle salasanan palautuslinkin.",
+    "forgotPasswordSuccessTitle": "Sähköposti lähetetty.",
+    "forgotPasswordSuccessDescription": "Jos tili löytyy, saat sähköpostiin ohjeet palautuslinkin.",
+    "sendResetLink": "Lähetä palautuslinkki"
   }
 }
