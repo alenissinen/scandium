@@ -1,3 +1,1 @@
-pub mod errors;
-pub mod pagination;
-pub mod types;
+pub mod password;
