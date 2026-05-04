@@ -44,6 +44,7 @@ export function ForgotPasswordForm({ modal }: ForgotPasswordFormProps) {
 
   return (
     <form action={action} className="flex flex-col gap-6">
+      <p className="text-sm text-muted-foreground mt-2">{t("forgotPasswordDescription")}</p>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">{t("email")}</Label>
         <Input id="email" name="email" type="email" placeholder={t("emailPlaceholder")} required />

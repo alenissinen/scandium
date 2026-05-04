@@ -15,7 +15,6 @@ export default async function ForgotPasswordPage() {
             <h1 className="text-lg font-bold tracking-widest text-foreground">
               SCAN<span className="text-primary">DIUM</span>
             </h1>
-            <p className="text-sm text-muted-foreground mt-2">{t("forgotPasswordDescription")}</p>
           </div>
           <div className="mb-8">
             <ForgotPasswordForm />

@@ -23,7 +23,6 @@ export default function ForgotPasswordModal() {
           <h2 className="text-lg font-bold tracking-widest text-foreground">
             SCAN<span className="text-primary">DIUM</span>
           </h2>
-          <p className="text-sm text-muted-foreground mt-2">{t("forgotPasswordDescription")}</p>
         </div>
         <ForgotPasswordForm modal />
       </div>
