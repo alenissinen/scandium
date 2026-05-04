@@ -29,6 +29,12 @@
     "forgotPasswordDescription": "Enter your email and we'll send you a password reset link.",
     "forgotPasswordSuccessTitle": "Email sent",
     "forgotPasswordSuccessDescription": "If an account exists, you'll receive an email.",
-    "sendResetLink": "Send reset link"
+    "sendResetLink": "Send reset link",
+    "invalidResetLink": "Link is invalid or expired",
+    "requestNewLink": "Please request a new one",
+    "newPassword": "New password",
+    "resetPassword": "Reset password",
+    "resetPasswordSuccessTitle": "Password reset!",
+    "resetPasswordSuccessDescription": "You can now login with your new password."
   }
 }

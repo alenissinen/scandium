@@ -132,15 +132,13 @@ export function AuthForm({ modal }: AuthFormProps) {
                   type={showPassword ? "text" : "password"}
                   required
                 />
-                <Button
-                  variant="ghost"
+                <button
                   type="button"
-                  size="icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0.5"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                </Button>
+                </button>
               </div>
             </div>
           </div>
@@ -218,15 +216,13 @@ export function AuthForm({ modal }: AuthFormProps) {
                   placeholder={t("passwordPlaceholder")}
                   required
                 />
-                <Button
-                  variant="ghost"
+                <button
                   type="button"
-                  size="icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0.5"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                </Button>
+                </button>
               </div>
             </div>
           </div>
