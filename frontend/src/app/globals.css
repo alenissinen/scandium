@@ -21,7 +21,7 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-  --font-sans: "Geist Sans", ui-sans-serif, system-ui;
+  --font-sans: "Outfit", ui-sans-serif, system-ui;
 }
 
 @layer base {

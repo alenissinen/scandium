@@ -3,8 +3,7 @@ import { getMessages } from "next-intl/server";
 import { Providers } from "@/components/providers";
 import "../globals.css";
 import type { Metadata } from "next";
-import "@fontsource/geist-sans/400.css";
-import "@fontsource/geist-sans/700.css";
+import { Outfit } from "next/font/google";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
@@ -19,6 +18,8 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
+const outfit = Outfit({ subsets: ["latin"] });
+
 export default async function LocaleLayout({ children, modal, params }: Props) {
   const { locale } = await params;
 
@@ -29,7 +30,7 @@ export default async function LocaleLayout({ children, modal, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className={outfit.className} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
           <Providers>
