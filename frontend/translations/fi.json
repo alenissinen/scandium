@@ -57,6 +57,9 @@
   },
   "filters": {
     "filters": "Filtterit",
-    "category": "Kategoria"
+    "category": "Kategoria",
+    "condition": "Kunto",
+    "price": "Hinta",
+    "apply": "Käytä"
   }
 }

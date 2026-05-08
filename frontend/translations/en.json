@@ -57,6 +57,9 @@
   },
   "filters": {
     "filters": "Filters",
-    "category": "Category"
+    "category": "Category",
+    "condition": "Condition",
+    "price": "Price",
+    "apply": "Apply"
   }
 }
