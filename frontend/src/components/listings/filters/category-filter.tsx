@@ -40,7 +40,7 @@ export function CategoryFilter() {
           <ChevronDown size={12} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-48">
+      <DropdownMenuContent className="w-42">
         <DropdownMenuItem onClick={() => select(null)}>{t("all")}</DropdownMenuItem>
         {listingCategories.map((category) => (
           <DropdownMenuItem
