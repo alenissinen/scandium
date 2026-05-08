@@ -1,9 +1,10 @@
 pre-commit:
+  no_stage_files: true
   parallel: true
   commands:
     frontend-check:
       root: "frontend/"
-      run: npx biome check .
+      run: npm run check
       glob: "*.{ts,tsx,js,jsx,json}"
     rust-clippy:
       run: cargo clippy --workspace -- -D warnings
