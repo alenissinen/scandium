@@ -22,7 +22,13 @@ export function ListingCard({ listing }: ListingCardProps) {
     <div className="bg-card border border-border rounded-xl overflow-hidden cursor-pointer hover:border-accent transition-colors">
       <div className="h-40 bg-muted relative overflow-hidden">
         {listing.image_url ? (
-          <Image src={listing.image_url} alt={listing.title} fill className="object-cover" />
+          <Image
+            src={listing.image_url}
+            alt={listing.title}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <ImageOff size={32} className="text-border" />
