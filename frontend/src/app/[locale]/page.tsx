@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { FilterSidebar } from "@/components/listings/filter-sidebar";
 import { ListingCard } from "@/components/listings/listing-card";
 import { Pagination } from "@/components/listings/pagination";
 import { Navbar } from "@/components/navbar/navbar";
@@ -23,17 +24,22 @@ export default async function HomePage({
   return (
     <TooltipProvider>
       <Navbar />
-      <main className="min-h-screen bg-background p-4 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-muted-foreground font-medium">{`${MOCK_LISTINGS.length} ${t("amount")}`}</span>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {listings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
-          ))}
-        </div>
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
-      </main>
+      <div className="flex max-w-7xl mx-auto">
+        <FilterSidebar />
+        <main className="flex-1 min-h-screen bg-background p-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm text-muted-foreground font-medium">
+              {`${MOCK_LISTINGS.length} ${t("amount")}`}
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {listings.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
+        </main>
+      </div>
     </TooltipProvider>
   );
 }

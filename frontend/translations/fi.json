@@ -54,5 +54,8 @@
   },
   "listings": {
     "amount": "ilmoitusta"
+  },
+  "filters": {
+    "filters": "Filtterit"
   }
 }

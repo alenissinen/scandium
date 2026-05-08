@@ -54,5 +54,8 @@
   },
   "listings": {
     "amount": "listings"
+  },
+  "filters": {
+    "filters": "Filters"
   }
 }
