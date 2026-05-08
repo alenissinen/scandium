@@ -56,6 +56,7 @@
     "amount": "listings"
   },
   "filters": {
-    "filters": "Filters"
+    "filters": "Filters",
+    "category": "Category"
   }
 }
