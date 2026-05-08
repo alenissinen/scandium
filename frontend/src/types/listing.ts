@@ -1,11 +1,14 @@
 export type ListingCondition = "new" | "excellent" | "good" | "used";
-export type ListingCategory =
-  | "skis"
-  | "snowboards"
-  | "boots"
-  | "bindings"
-  | "clothing"
-  | "protection";
+export const listingCategories = [
+  "skis",
+  "snowboards",
+  "boots",
+  "bindings",
+  "clothing",
+  "protection",
+] as const;
+
+export type ListingCategory = (typeof listingCategories)[number];
 
 export type Listing = {
   id: string;
