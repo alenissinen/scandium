@@ -2,6 +2,7 @@
 
 import { SlidersHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { CategoryFilter } from "@/components/listings/filters/category-filter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -20,7 +21,15 @@ function FilterSection({ title, children }: FilterSectionProps) {
 }
 
 function SidebarContent() {
-  return <aside className="shrink-0 px-4 min-h-screen"></aside>;
+  const t = useTranslations("filters");
+
+  return (
+    <aside className="w-full px-4 min-h-screen">
+      <FilterSection title={t("category")}>
+        <CategoryFilter />
+      </FilterSection>
+    </aside>
+  );
 }
 
 export function FilterSidebar() {
@@ -38,11 +47,10 @@ export function FilterSidebar() {
         <Sheet>
           <SheetTrigger asChild>
             <Button size="lg" className="gap-2 shadow-lg">
-              <SlidersHorizontal size={14} />
-              {t("filters")}
+              <SlidersHorizontal size={16} />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-4">
+          <SheetContent side="left" className="w-32 p-0">
             <SheetTitle className="sr-only">{t("filters")}</SheetTitle>
             <SidebarContent />
           </SheetContent>

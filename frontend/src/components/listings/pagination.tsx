@@ -1,8 +1,9 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/navigation";
 
 type PaginationProps = {
   currentPage: number;
@@ -11,6 +12,13 @@ type PaginationProps = {
 
 export function Pagination({ currentPage, totalPages }: PaginationProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  function navigate(page: number) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(page));
+    router.push(`?${params.toString()}`);
+  }
 
   if (totalPages <= 1) return null;
 
@@ -25,7 +33,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
         variant="ghost"
         size="icon-sm"
         disabled={currentPage === 1}
-        onClick={() => router.push(`?page=${currentPage - 1}`)}
+        onClick={() => navigate(currentPage - 1)}
       >
         <ChevronLeft size={14} />
       </Button>
@@ -40,7 +48,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             <Button
               variant="ghost"
               size="icon-sm"
-              onClick={() => router.push(`?page=${page}`)}
+              onClick={() => navigate(page)}
               className={currentPage === page ? "bg-muted text-foreground" : ""}
             >
               <span className="text-xs">{page}</span>
@@ -53,7 +61,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
         variant="ghost"
         size="icon-sm"
         disabled={currentPage === totalPages}
-        onClick={() => router.push(`?page=${currentPage + 1}`)}
+        onClick={() => navigate(currentPage + 1)}
       >
         <ChevronRight size={14} />
       </Button>

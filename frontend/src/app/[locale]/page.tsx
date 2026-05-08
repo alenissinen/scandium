@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 import { FilterSidebar } from "@/components/listings/filter-sidebar";
 import { ListingCard } from "@/components/listings/listing-card";
 import { Pagination } from "@/components/listings/pagination";
@@ -37,7 +38,9 @@ export default async function HomePage({
               <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
-          <Pagination currentPage={currentPage} totalPages={totalPages} />
+          <Suspense fallback={null}>
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
+          </Suspense>
         </main>
       </div>
     </TooltipProvider>
