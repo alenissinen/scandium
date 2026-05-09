@@ -55,3 +55,65 @@ impl JwtService {
         Ok(data.claims)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn create_service() -> JwtService {
+        JwtService::new("test_secret_key")
+    }
+
+    #[test]
+    fn create_access_token_returns_token() {
+        let service = create_service();
+        let result = service.create_access_token(Uuid::new_v4());
+
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn create_refresh_token_returns_token() {
+        let service = create_service();
+        let result = service.create_refresh_token(Uuid::new_v4());
+
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn verify_valid_token_returns_claims() {
+        let service = create_service();
+        let token = service.create_access_token(Uuid::new_v4()).unwrap();
+        let claims = service.verify(&token);
+
+        assert!(claims.is_ok());
+    }
+
+    #[test]
+    fn token_subject_matches_user_id() {
+        let service = create_service();
+        let user_id = Uuid::new_v4();
+        let token = service.create_access_token(user_id).unwrap();
+        let claims = service.verify(&token).unwrap();
+
+        assert_eq!(claims.sub, user_id.to_string());
+    }
+
+    #[test]
+    fn verify_invalid_token_fails() {
+        let service = create_service();
+        let result = service.verify("not.a.valid.token");
+
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn verify_wrong_secret_fails() {
+        let service1 = create_service();
+        let service2 = JwtService::new("different_secret");
+        let token = service1.create_access_token(Uuid::new_v4()).unwrap();
+        let result = service2.verify(&token);
+
+        assert!(result.is_err());
+    }
+}

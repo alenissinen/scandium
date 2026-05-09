@@ -29,7 +29,7 @@ async function forgotPasswordAction(
   return { success: true };
 }
 
-export function ForgotPasswordForm({ modal }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ modal: _modal }: ForgotPasswordFormProps) {
   const t = useTranslations("auth");
   const [state, action, isPending] = useActionState(forgotPasswordAction, null);
 

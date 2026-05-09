@@ -1,3 +1,6 @@
+[![CI](https://github.com/alenissinen/scandium/actions/workflows/ci.yml/badge.svg)](https://github.com/alenissinen/scandium/actions/workflows/ci.yml)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
+
 > [!IMPORTANT]
 > This project is my personal portfolio project, AI (and agents) will be used but I won't be blindly generating code with them. I've learned to code because I like to build things and **write** code! This is also great exercise on building a scalable modern web application.
 >
