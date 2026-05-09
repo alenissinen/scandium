@@ -83,18 +83,23 @@ mod tests {
         async fn create(&self, _: CreateUserInput) -> Result<User, UserError> {
             unimplemented!()
         }
+
         async fn update_password(&self, _: Uuid, _: String) -> Result<(), UserError> {
             Ok(())
         }
+
         async fn find_by_id(&self, id: Uuid) -> Result<User, UserError> {
             Err(UserError::NotFound(id.into()))
         }
+
         async fn find_by_email(&self, _: &str) -> Result<User, UserError> {
             unimplemented!()
         }
+
         async fn find_by_username(&self, _: &str) -> Result<User, UserError> {
             unimplemented!()
         }
+
         async fn find_by_username_or_email(&self, _: &str) -> Result<User, UserError> {
             unimplemented!()
         }
