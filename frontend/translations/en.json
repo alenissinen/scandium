@@ -61,5 +61,8 @@
     "condition": "Condition",
     "price": "Price",
     "apply": "Apply"
+  },
+  "search": {
+    "placeholder": "Search skis, snowboards, bindings..."
   }
 }

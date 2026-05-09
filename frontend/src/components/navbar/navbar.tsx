@@ -1,8 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Suspense } from "react";
 import { LocaleMenu } from "@/components/navbar/locale-menu";
 import { ThemeToggle } from "@/components/navbar/theme-toggle";
+import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/contexts/user-context";
 import { Link } from "@/i18n/navigation";
@@ -19,7 +21,13 @@ export function Navbar() {
             SCAN<span className="text-primary">DIUM</span>
           </span>
         </a>
-        <div className="ml-8 hidden items-center gap-6 md:flex"></div>
+        <div className="flex-1 justify-center hidden md:flex">
+          <div className="w-full max-w-md">
+            <Suspense fallback={null}>
+              <SearchBar className="w-full" />
+            </Suspense>
+          </div>
+        </div>
         <div className="ml-auto flex items-center">
           <LocaleMenu />
           <ThemeToggle />

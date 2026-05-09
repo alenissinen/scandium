@@ -4,6 +4,7 @@ import { FilterSidebar } from "@/components/listings/filter-sidebar";
 import { ListingCard } from "@/components/listings/listing-card";
 import { Pagination } from "@/components/listings/pagination";
 import { Navbar } from "@/components/navbar/navbar";
+import { SearchBar } from "@/components/search-bar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MOCK_LISTINGS } from "@/lib/mock-data";
 
@@ -25,6 +26,11 @@ export default async function HomePage({
   return (
     <TooltipProvider>
       <Navbar />
+      <div className="md:hidden px-4 py-2 border-b border-border">
+        <Suspense fallback={null}>
+          <SearchBar className="w-full" />
+        </Suspense>
+      </div>
       <div className="flex max-w-7xl mx-auto">
         <FilterSidebar />
         <main className="flex-1 min-h-screen bg-background p-4">

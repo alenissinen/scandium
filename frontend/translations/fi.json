@@ -61,5 +61,8 @@
     "condition": "Kunto",
     "price": "Hinta",
     "apply": "Käytä"
+  },
+  "search": {
+    "placeholder": "Etsi suksia, lautoja, siteitä..."
   }
 }
