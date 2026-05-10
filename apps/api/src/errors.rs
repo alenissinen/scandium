@@ -3,12 +3,13 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
 };
-use domain::{auth::error::AuthError, user::error::UserError};
+use domain::{auth::error::AuthError, listing::error::ListingError, user::error::UserError};
 use serde_json::json;
 
 pub enum ApiError {
     User(UserError),
     Auth(AuthError),
+    Listing(ListingError),
     Internal(String),
 }
 
@@ -49,6 +50,21 @@ impl IntoResponse for ApiError {
                 AuthError::TokenAlreadyUsed => (StatusCode::UNAUTHORIZED, e.to_string()),
                 AuthError::TokenNotFound => (StatusCode::NOT_FOUND, e.to_string()),
                 AuthError::Infrastructure(e) => {
+                    tracing::error!("Infrastructure error: {}", e);
+                    (
+                        StatusCode::INTERNAL_SERVER_ERROR,
+                        "Internal server error".to_string(),
+                    )
+                }
+            },
+            // ListingError
+            ApiError::Listing(e) => match e {
+                ListingError::NotFound(_) => (StatusCode::NOT_FOUND, e.to_string()),
+                ListingError::Unauthorized => (StatusCode::FORBIDDEN, e.to_string()),
+                ListingError::TitleTooShort | ListingError::InvalidPrice => {
+                    (StatusCode::UNPROCESSABLE_ENTITY, e.to_string())
+                }
+                ListingError::Infrastructure(e) => {
                     tracing::error!("Infrastructure error: {}", e);
                     (
                         StatusCode::INTERNAL_SERVER_ERROR,

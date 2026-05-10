@@ -5,6 +5,7 @@ use application::{
         forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
         reset_password::ResetPasswordUseCase, verify_reset_token::VerifyResetTokenUseCase,
     },
+    listing::create_listing::CreateListingUseCase,
     user::get_user::GetUserUseCase,
 };
 use infrastructure::jwt::JwtService;
@@ -13,6 +14,7 @@ use infrastructure::jwt::JwtService;
 pub struct AppState {
     pub auth: Arc<AuthContainer>,
     pub users: Arc<UserContainer>,
+    pub listings: Arc<ListingContainer>,
 }
 
 #[derive(Clone)]
@@ -25,6 +27,12 @@ pub struct AuthContainer {
     pub reset_password: ResetPasswordUseCase,
 }
 
+#[derive(Clone)]
 pub struct UserContainer {
     pub get: GetUserUseCase,
+}
+
+#[derive(Clone)]
+pub struct ListingContainer {
+    pub create: CreateListingUseCase,
 }

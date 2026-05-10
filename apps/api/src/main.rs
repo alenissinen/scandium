@@ -10,6 +10,7 @@ use application::{
         forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
         reset_password::ResetPasswordUseCase, verify_reset_token::VerifyResetTokenUseCase,
     },
+    listing::create_listing::CreateListingUseCase,
     user::get_user::GetUserUseCase,
 };
 use axum::{
@@ -24,6 +25,7 @@ use infrastructure::{
     email::resend::ResendEmailService,
     jwt::JwtService,
     postgres::{
+        listing_repository::PgListingRepository,
         password_reset_repository::PgPasswordResetRepository, user_repository::PgUserRepository,
     },
 };
@@ -36,7 +38,7 @@ use routes::health::health_check;
 
 use crate::{
     middleware::auth::jwt_auth_middleware,
-    state::{AppState, AuthContainer, UserContainer},
+    state::{AppState, AuthContainer, ListingContainer, UserContainer},
 };
 
 #[tokio::main]
@@ -79,6 +81,7 @@ async fn main() {
     let user_repository = Arc::new(PgUserRepository::new(pool.clone()));
     let pw_reset_repository = Arc::new(PgPasswordResetRepository::new(pool.clone()));
     let email_service = Arc::new(ResendEmailService::new(resend_api_key, app_email));
+    let listing_repository = Arc::new(PgListingRepository::new(pool.clone()));
 
     let state = AppState {
         auth: Arc::new(AuthContainer {
@@ -100,6 +103,9 @@ async fn main() {
         users: Arc::new(UserContainer {
             get: GetUserUseCase::new(user_repository.clone()),
         }),
+        listings: Arc::new(ListingContainer {
+            create: CreateListingUseCase::new(listing_repository.clone()),
+        }),
     };
 
     // Cors rules
@@ -112,7 +118,8 @@ async fn main() {
     // Create router with jwt auth middleware
     let protected: Router<AppState> = Router::new()
         .route("/auth/me", get(routes::auth::me))
-        .layer(axum::middleware::from_fn_with_state(
+        .route("/listings", post(routes::listing::create_listing))
+        .route_layer(axum::middleware::from_fn_with_state(
             state.clone(),
             jwt_auth_middleware,
         ));
