@@ -4,6 +4,7 @@ use domain::user::{entity::User, error::UserError, repository::UserRepository};
 use uuid::Uuid;
 
 // Use dynamic dispatch for repository type to make mock testing easier
+#[derive(Clone)]
 pub struct GetUserUseCase {
     user_repository: Arc<dyn UserRepository>,
 }
