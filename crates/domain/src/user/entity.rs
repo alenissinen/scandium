@@ -49,3 +49,50 @@ impl From<User> for PublicUser {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn create_user() -> User {
+        User {
+            id: Uuid::new_v4(),
+            email: "test@example.com".to_string(),
+            username: "testuser".to_string(),
+            password_hash: "secret_hash".to_string(),
+            display_name: "Test User".to_string(),
+            avatar_url: None,
+            location: None,
+            phone: None,
+            is_verified: false,
+            is_active: true,
+            role: UserRole::User,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+        }
+    }
+
+    #[test]
+    fn user_into_public_user_maps_fields_correctly() {
+        let user = create_user();
+        let public: PublicUser = user.clone().into();
+
+        assert_eq!(public.id, user.id);
+        assert_eq!(public.username, user.username);
+        assert_eq!(public.display_name, user.display_name);
+        assert_eq!(public.avatar_url, user.avatar_url);
+        assert_eq!(public.location, user.location);
+    }
+
+    #[test]
+    fn public_user_excludes_sensitive_fields() {
+        let user = create_user();
+        let public: PublicUser = user.into();
+        let public_json = serde_json::to_string(&public).unwrap();
+
+        assert!(!public_json.contains("password_hash"));
+        assert!(!public_json.contains("secret_hash"));
+        assert!(!public_json.contains("email"));
+        assert!(!public_json.contains("phone"));
+    }
+}
