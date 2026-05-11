@@ -36,5 +36,33 @@
     "resetPassword": "Vaihda salasana",
     "resetPasswordSuccessTitle": "Salasana vaihdettu!",
     "resetPasswordSuccessDescription": "Voit nyt kirjautua sisään uudella salasanallasi."
+  },
+  "categories": {
+    "all": "Kaikki",
+    "skis": "Sukset",
+    "snowboards": "Lumilaudat",
+    "boots": "Monot",
+    "bindings": "Siteet",
+    "clothing": "Vaatteet",
+    "protection": "Suojavarusteet"
+  },
+  "conditions": {
+    "new": "Uusi",
+    "excellent": "Erinomainen",
+    "good": "Hyvä",
+    "used": "Käytetty"
+  },
+  "listings": {
+    "amount": "ilmoitusta"
+  },
+  "filters": {
+    "filters": "Filtterit",
+    "category": "Kategoria",
+    "condition": "Kunto",
+    "price": "Hinta",
+    "apply": "Käytä"
+  },
+  "search": {
+    "placeholder": "Etsi suksia, lautoja, siteitä..."
   }
 }

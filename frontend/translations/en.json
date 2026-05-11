@@ -36,5 +36,33 @@
     "resetPassword": "Reset password",
     "resetPasswordSuccessTitle": "Password reset!",
     "resetPasswordSuccessDescription": "You can now login with your new password."
+  },
+  "categories": {
+    "all": "All",
+    "skis": "Skis",
+    "snowboards": "Snowboards",
+    "boots": "Boots",
+    "bindings": "Bindings",
+    "clothing": "Clothing",
+    "protection": "Protection gear"
+  },
+  "conditions": {
+    "new": "New",
+    "excellent": "Excellent",
+    "good": "Good",
+    "used": "Used"
+  },
+  "listings": {
+    "amount": "listings"
+  },
+  "filters": {
+    "filters": "Filters",
+    "category": "Category",
+    "condition": "Condition",
+    "price": "Price",
+    "apply": "Apply"
+  },
+  "search": {
+    "placeholder": "Search skis, snowboards, bindings..."
   }
 }

@@ -6,12 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 
 async function verifyToken(token: string): Promise<boolean> {
-  const response = await fetch(`${process.env.API_URL}/api/v1/auth/verify-reset-token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token }),
-    cache: "no-store",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/verify-reset-token`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+      cache: "no-store",
+    }
+  );
 
   return response.ok;
 }
