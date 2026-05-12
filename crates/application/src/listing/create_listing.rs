@@ -3,6 +3,7 @@ use std::sync::Arc;
 use domain::listing::{
     entity::{Listing, ListingCondition, ListingType},
     error::ListingError,
+    events::ListingEventPublisher,
     repository::{CreateListingInput, ListingRepository},
 };
 use uuid::Uuid;
@@ -20,11 +21,18 @@ pub struct CreateListingRequest {
 #[derive(Clone)]
 pub struct CreateListingUseCase {
     listing_repo: Arc<dyn ListingRepository>,
+    event_publisher: Arc<dyn ListingEventPublisher>,
 }
 
 impl CreateListingUseCase {
-    pub fn new(listing_repo: Arc<dyn ListingRepository>) -> Self {
-        Self { listing_repo }
+    pub fn new(
+        listing_repo: Arc<dyn ListingRepository>,
+        event_publisher: Arc<dyn ListingEventPublisher>,
+    ) -> Self {
+        Self {
+            listing_repo,
+            event_publisher,
+        }
     }
 
     pub async fn execute(&self, req: CreateListingRequest) -> Result<Listing, ListingError> {
@@ -36,6 +44,7 @@ impl CreateListingUseCase {
             return Err(ListingError::InvalidPrice);
         }
 
+        // Save listing to database
         let listing = self
             .listing_repo
             .create(CreateListingInput {
@@ -48,6 +57,12 @@ impl CreateListingUseCase {
                 location: req.location,
             })
             .await?;
+
+        // Send Kafka event, in case it fails, just log the error since the listing
+        // has already been saved to db
+        if let Err(e) = self.event_publisher.publish_listing_created(&listing).await {
+            tracing::error!(listing_id = %listing.id, error = %e, "Failed to publish listing created event");
+        }
 
         Ok(listing)
     }
@@ -68,6 +83,8 @@ mod tests {
     struct MockListingRepo {
         should_fail: bool,
     }
+
+    struct MockEventPublisher;
 
     #[async_trait]
     impl ListingRepository for MockListingRepo {
@@ -100,8 +117,18 @@ mod tests {
         }
     }
 
+    #[async_trait]
+    impl ListingEventPublisher for MockEventPublisher {
+        async fn publish_listing_created(&self, _: &Listing) -> Result<(), String> {
+            Ok(())
+        }
+    }
+
     fn create_use_case(should_fail: bool) -> CreateListingUseCase {
-        CreateListingUseCase::new(Arc::new(MockListingRepo { should_fail }))
+        CreateListingUseCase::new(
+            Arc::new(MockListingRepo { should_fail }),
+            Arc::new(MockEventPublisher),
+        )
     }
 
     fn valid_request() -> CreateListingRequest {
