@@ -24,6 +24,7 @@ use axum::{
 use infrastructure::{
     email::resend::ResendEmailService,
     jwt::JwtService,
+    kafka::producer::KafkaProducer,
     postgres::{
         listing_repository::PgListingRepository,
         password_reset_repository::PgPasswordResetRepository, user_repository::PgUserRepository,
@@ -67,6 +68,8 @@ async fn main() {
     let app_url = std::env::var("APP_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
     let app_email = std::env::var("APP_EMAIL").expect("APP_EMAIL must be set");
     let resend_api_key = std::env::var("RESEND_API_KEY").expect("RESEND_API_KEY must be set");
+    let kafka_brokers =
+        std::env::var("KAFKA_BROKERS").unwrap_or_else(|_| "localhost:9092".to_string());
 
     // Create postgres pool
     let pool = PgPoolOptions::new()
@@ -82,6 +85,7 @@ async fn main() {
     let pw_reset_repository = Arc::new(PgPasswordResetRepository::new(pool.clone()));
     let email_service = Arc::new(ResendEmailService::new(resend_api_key, app_email));
     let listing_repository = Arc::new(PgListingRepository::new(pool.clone()));
+    let kafka_producer = Arc::new(KafkaProducer::new(&kafka_brokers));
 
     let state = AppState {
         auth: Arc::new(AuthContainer {
@@ -104,7 +108,7 @@ async fn main() {
             get: GetUserUseCase::new(user_repository.clone()),
         }),
         listings: Arc::new(ListingContainer {
-            create: CreateListingUseCase::new(listing_repository.clone()),
+            create: CreateListingUseCase::new(listing_repository.clone(), kafka_producer.clone()),
         }),
     };
 
