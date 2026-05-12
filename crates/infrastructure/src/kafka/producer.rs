@@ -1,5 +1,7 @@
 use std::time::Duration;
 
+use async_trait::async_trait;
+use domain::listing::{entity::Listing, events::ListingEventPublisher};
 use rdkafka::{
     ClientConfig,
     producer::{FutureProducer, FutureRecord},
@@ -60,5 +62,23 @@ impl KafkaProducer {
         tracing::info!(topic = topic, key = key, "Kafka event sent");
 
         Ok(())
+    }
+}
+
+#[async_trait]
+impl ListingEventPublisher for KafkaProducer {
+    async fn publish_listing_created(&self, listing: &Listing) -> Result<(), String> {
+        // Convert Listing entity to Kafka event and send it to consumer
+        self.send_listing_event(ListingEvent::Created {
+            listing_id: listing.id.to_string(),
+            user_id: listing.user_id.to_string(),
+            title: listing.title.clone(),
+            price: listing.price,
+            listing_type: format!("{:?}", listing.listing_type).to_lowercase(),
+            condition: format!("{:?}", listing.condition).to_lowercase(),
+            location: listing.location.clone(),
+            description: listing.description.clone(),
+        })
+        .await
     }
 }
