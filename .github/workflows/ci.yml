@@ -1,14 +1,12 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
 jobs:
-  rust:
-    name: Rust
+  backend:
+    name: Backend
     runs-on: ubuntu-latest
     env:
       SQLX_OFFLINE: "true"
