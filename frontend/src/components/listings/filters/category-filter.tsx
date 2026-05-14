@@ -17,15 +17,15 @@ export function CategoryFilter() {
   const t = useTranslations("categories");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const active = searchParams.get("category");
+  const active = searchParams.get("listing_type");
 
   function select(category: ListingCategory | null) {
     const params = new URLSearchParams(searchParams.toString());
 
     if (category === null) {
-      params.delete("category");
+      params.delete("listing_type");
     } else {
-      params.set("category", category);
+      params.set("listing_type", category);
     }
 
     params.delete("page");
