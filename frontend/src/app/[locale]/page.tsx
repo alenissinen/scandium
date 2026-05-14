@@ -6,22 +6,43 @@ import { Pagination } from "@/components/listings/pagination";
 import { Navbar } from "@/components/navbar/navbar";
 import { SearchBar } from "@/components/search-bar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { MOCK_LISTINGS } from "@/lib/mock-data";
+import type { Listing } from "@/types/listing";
 
-const LISTINGS_PER_PAGE = 20;
+type SearchParams = {
+  q?: string;
+  listing_type?: string;
+  condition?: string;
+  min_price?: string;
+  max_price?: string;
+  page?: string;
+};
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>;
-}) {
-  const { page } = await searchParams;
+async function fetchListings(params: SearchParams) {
+  const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/listings`);
+
+  if (params.q) url.searchParams.set("q", params.q);
+  if (params.listing_type) url.searchParams.set("listing_type", params.listing_type);
+  if (params.condition) url.searchParams.set("condition", params.condition);
+  if (params.min_price) url.searchParams.set("min_price", params.min_price);
+  if (params.max_price) url.searchParams.set("max_price", params.max_price);
+  if (params.page) url.searchParams.set("page", params.page);
+
+  const response = await fetch(url.toString(), { cache: "no-store" });
+
+  if (!response.ok) return { listings: [], total: 0 };
+
+  return response.json() as Promise<{ listings: Listing[]; total: number }>;
+}
+
+const PER_PAGE = 20;
+
+export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const params = await searchParams;
   const t = await getTranslations("listings");
 
-  const currentPage = Math.max(1, Number(page) || 1);
-  const totalPages = Math.ceil(MOCK_LISTINGS.length / LISTINGS_PER_PAGE);
-  const start = (currentPage - 1) * LISTINGS_PER_PAGE;
-  const listings = MOCK_LISTINGS.slice(start, start + LISTINGS_PER_PAGE);
+  const { listings, total } = await fetchListings(params);
+  const currentPage = Number(params.page) || 1;
+  const totalPages = Math.ceil(total / PER_PAGE);
 
   return (
     <TooltipProvider>
@@ -36,7 +57,7 @@ export default async function HomePage({
         <main className="flex-1 min-h-screen bg-background p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm text-muted-foreground font-medium">
-              {`${MOCK_LISTINGS.length} ${t("amount")}`}
+              {`${total} ${t("amount")}`}
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">

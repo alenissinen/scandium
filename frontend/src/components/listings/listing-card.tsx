@@ -45,7 +45,7 @@ export function ListingCard({ listing }: ListingCardProps) {
           </span>
         </div>
         <p className="text-xs text-muted-foreground mb-3">
-          {t(`categories.${listing.category}`)}
+          {t(`categories.${listing.listing_type}`)}
           {listing.year ? ` · ${listing.year}` : ""}
         </p>
         <div className="flex items-center justify-between">
