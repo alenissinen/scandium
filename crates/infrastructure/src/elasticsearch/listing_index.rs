@@ -43,6 +43,7 @@ impl ListingIndex {
                         "title":        { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
                         "description":  { "type": "text" },
                         "price":        { "type": "integer" },
+                        "year":         { "type": "integer" },
                         "listing_type": { "type": "keyword" },
                         "condition":    { "type": "keyword" },
                         "location":     { "type": "keyword" },

@@ -24,6 +24,7 @@ struct ListingRow {
     title: String,
     description: Option<String>,
     price: i32,
+    pub year: Option<i32>,
     listing_type: String,
     condition: String,
     location: String,
@@ -40,6 +41,7 @@ impl ListingRow {
             title: self.title,
             description: self.description,
             price: self.price,
+            year: self.year,
             listing_type: parse_listing_type(&self.listing_type),
             condition: parse_condition(&self.condition),
             location: self.location,
@@ -120,7 +122,7 @@ impl ListingRepository for PgListingRepository {
             INSERT INTO listings (user_id, title, description, price, listing_type, condition, location)
             VALUES ($1, $2, $3, $4, $5::listing_type, $6::listing_condition, $7)
             RETURNING
-                id, user_id, title, description, price,
+                id, user_id, title, description, price, year,
                 listing_type as "listing_type!: String",
                 condition as "condition!: String",
                 location, is_active, created_at, updated_at
@@ -145,7 +147,7 @@ impl ListingRepository for PgListingRepository {
             ListingRow,
             r#"
             SELECT
-                id, user_id, title, description, price,
+                id, user_id, title, description, price, year,
                 listing_type as "listing_type!: String",
                 condition as "condition!: String",
                 location, is_active, created_at, updated_at
@@ -181,7 +183,7 @@ impl ListingRepository for PgListingRepository {
             ListingRow,
             r#"
             SELECT
-                id, user_id, title, description, price,
+                id, user_id, title, description, price, year,
                 listing_type as "listing_type!: String",
                 condition as "condition!: String",
                 location, is_active, created_at, updated_at
