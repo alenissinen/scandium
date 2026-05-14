@@ -5,10 +5,12 @@ edition = "2024"
 
 [dependencies]
 domain = { path = "../../crates/domain" }
-application = { path = "../../crates/application" }
 infrastructure = { path = "../../crates/infrastructure" }
-shared = { path = "../../crates/shared" }
 tokio = { workspace = true }
 rdkafka = { workspace = true }
+elasticsearch = { workspace = true }
+serde_json = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
+dotenvy = { workspace = true }
+serde = { workspace = true }
