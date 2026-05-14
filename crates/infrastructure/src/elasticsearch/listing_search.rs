@@ -1,21 +1,10 @@
-use domain::listing::document::ListingDocument;
+use async_trait::async_trait;
+use domain::listing::{
+    document::ListingDocument,
+    search::{ListingSearchParams, ListingSearchPort, ListingSearchResult},
+};
 use elasticsearch::{Elasticsearch, SearchParts};
 use serde_json::{Value, json};
-
-pub struct ListingSearchParams {
-    pub query: Option<String>,
-    pub listing_type: Option<String>,
-    pub condition: Option<Vec<String>>,
-    pub min_price: Option<i32>,
-    pub max_price: Option<i32>,
-    pub page: u32,
-    pub per_page: u32,
-}
-
-pub struct ListingSearchResult {
-    pub listings: Vec<ListingDocument>,
-    pub total: u64,
-}
 
 pub struct ListingSearch {
     client: Elasticsearch,
@@ -30,7 +19,10 @@ impl ListingSearch {
         }
     }
 
-    pub async fn search(&self, params: ListingSearchParams) -> Result<ListingSearchResult, String> {
+    pub async fn execute_search(
+        &self,
+        params: ListingSearchParams,
+    ) -> Result<ListingSearchResult, String> {
         let mut must: Vec<Value> = vec![];
 
         if let Some(q) = &params.query {
@@ -120,5 +112,12 @@ impl ListingSearch {
             .collect();
 
         Ok(ListingSearchResult { listings, total })
+    }
+}
+
+#[async_trait]
+impl ListingSearchPort for ListingSearch {
+    async fn search(&self, params: ListingSearchParams) -> Result<ListingSearchResult, String> {
+        self.execute_search(params).await
     }
 }
