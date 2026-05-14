@@ -77,4 +77,4 @@ create_listing "Plum Guide 145" 340 "bindings" "excellent" "Rovaniemi" "Ultralig
 
 echo ""
 echo "Done! ES listing count:"
-echo "curl http://localhost:9200/listings/_count"
+curl http://localhost:9200/listings/_count

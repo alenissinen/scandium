@@ -23,3 +23,12 @@ Seeds the database and Elasticsearch with example listings.
 # Custom API URL
 API_URL=http://localhost:3001 ./scripts/seed_listings.sh <access_token>
 ```
+
+## create_kafka_topics.sh
+
+Creates required Kafka topics.
+
+```bash
+
+./scripts/create_kafka_topics.sh
+```
