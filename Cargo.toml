@@ -27,7 +27,7 @@ sqlx = { version = "0.8.6", features = [
 ] }
 redis = { version = "1.2.0", features = ["tokio-comp"] }
 rdkafka = { version = "0.39.0", features = ["cmake-build"] }
-elasticsearch = "8.5.0-alpha.1"
+elasticsearch = "9.1.0-alpha.1"
 jsonwebtoken = { version = "10.3.0", features = ["aws_lc_rs"] }
 argon2 = { version = "0.5", features = ["std"] }
 uuid = { version = "1", features = ["v4", "serde"] }
