@@ -12,7 +12,7 @@ use serde::Serialize;
 #[serde(tag = "event_type", rename_all = "snake_case")]
 pub enum ListingEvent {
     Created {
-        listing_id: String,
+        id: String,
         user_id: String,
         title: String,
         price: i32,
@@ -20,6 +20,7 @@ pub enum ListingEvent {
         condition: String,
         location: String,
         description: Option<String>,
+        created_at: String,
     },
 }
 
@@ -48,7 +49,7 @@ impl KafkaProducer {
         };
 
         let key = match &event {
-            ListingEvent::Created { listing_id, .. } => listing_id.clone(),
+            ListingEvent::Created { id, .. } => id.clone(),
         };
 
         self.producer
@@ -70,14 +71,15 @@ impl ListingEventPublisher for KafkaProducer {
     async fn publish_listing_created(&self, listing: &Listing) -> Result<(), String> {
         // Convert Listing entity to Kafka event and send it to consumer
         self.send_listing_event(ListingEvent::Created {
-            listing_id: listing.id.to_string(),
+            id: listing.id.to_string(),
             user_id: listing.user_id.to_string(),
             title: listing.title.clone(),
+            description: listing.description.clone(),
             price: listing.price,
             listing_type: format!("{:?}", listing.listing_type).to_lowercase(),
             condition: format!("{:?}", listing.condition).to_lowercase(),
             location: listing.location.clone(),
-            description: listing.description.clone(),
+            created_at: listing.created_at.to_rfc3339(),
         })
         .await
     }

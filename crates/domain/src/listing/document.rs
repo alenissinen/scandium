@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 // Elasticsearch document for indexing
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListingDocument {
+    #[serde(alias = "listing_id")]
     pub id: String,
     pub user_id: String,
     pub title: String,

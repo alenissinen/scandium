@@ -38,7 +38,7 @@ impl ListingIndex {
             .body(json!({
                 "mappings": {
                     "properties": {
-                        "id":           { "type": "keyword" },
+                        "listing_id":   { "type": "keyword" },
                         "user_id":      { "type": "keyword" },
                         "title":        { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
                         "description":  { "type": "text" },
