@@ -34,7 +34,7 @@ async function fetchListings(params: SearchParams) {
   return response.json() as Promise<{ listings: Listing[]; total: number }>;
 }
 
-const PER_PAGE = 20;
+const PER_PAGE = 21;
 
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;

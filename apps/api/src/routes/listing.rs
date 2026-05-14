@@ -75,7 +75,7 @@ pub async fn search_listings(
             min_price: params.min_price,
             max_price: params.max_price,
             page: params.page.unwrap_or(1),
-            per_page: 20,
+            per_page: 21,
         })
         .await
         .map_err(ApiError::Internal)?;
