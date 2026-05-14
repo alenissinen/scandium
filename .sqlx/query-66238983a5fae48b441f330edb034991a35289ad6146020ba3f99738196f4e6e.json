@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            INSERT INTO listings (user_id, title, description, price, listing_type, condition, location)\n            VALUES ($1, $2, $3, $4, $5::listing_type, $6::listing_condition, $7)\n            RETURNING\n                id, user_id, title, description, price,\n                listing_type as \"listing_type!: String\",\n                condition as \"condition!: String\",\n                location, is_active, created_at, updated_at\n            ",
+  "query": "\n            INSERT INTO listings (user_id, title, description, price, year, listing_type, condition, location)\n            VALUES ($1, $2, $3, $4, $5, $6::listing_type, $7::listing_condition, $8)\n            RETURNING\n                id, user_id, title, description, price, year,\n                listing_type as \"listing_type!: String\",\n                condition as \"condition!: String\",\n                location, is_active, created_at, updated_at\n            ",
   "describe": {
     "columns": [
       {
@@ -30,6 +30,11 @@
       },
       {
         "ordinal": 5,
+        "name": "year",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
         "name": "listing_type!: String",
         "type_info": {
           "Custom": {
@@ -48,7 +53,7 @@
         }
       },
       {
-        "ordinal": 6,
+        "ordinal": 7,
         "name": "condition!: String",
         "type_info": {
           "Custom": {
@@ -65,22 +70,22 @@
         }
       },
       {
-        "ordinal": 7,
+        "ordinal": 8,
         "name": "location",
         "type_info": "Text"
       },
       {
-        "ordinal": 8,
+        "ordinal": 9,
         "name": "is_active",
         "type_info": "Bool"
       },
       {
-        "ordinal": 9,
+        "ordinal": 10,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 10,
+        "ordinal": 11,
         "name": "updated_at",
         "type_info": "Timestamptz"
       }
@@ -90,6 +95,7 @@
         "Uuid",
         "Text",
         "Text",
+        "Int4",
         "Int4",
         {
           "Custom": {
@@ -128,6 +134,7 @@
       false,
       true,
       false,
+      true,
       false,
       false,
       false,
@@ -136,5 +143,5 @@
       false
     ]
   },
-  "hash": "2b389ac06036dd15bf0cc81ab93cd82506d55fd4b647b63d973f2f23e78d88f0"
+  "hash": "66238983a5fae48b441f330edb034991a35289ad6146020ba3f99738196f4e6e"
 }

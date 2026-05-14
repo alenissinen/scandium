@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            SELECT\n                id, user_id, title, description, price,\n                listing_type as \"listing_type!: String\",\n                condition as \"condition!: String\",\n                location, is_active, created_at, updated_at\n            FROM listings\n            WHERE user_id = $1 AND is_active = true\n            ORDER BY created_at DESC\n            ",
+  "query": "\n            SELECT\n                id, user_id, title, description, price, year,\n                listing_type as \"listing_type!: String\",\n                condition as \"condition!: String\",\n                location, is_active, created_at, updated_at\n            FROM listings\n            WHERE user_id = $1 AND is_active = true\n            ORDER BY created_at DESC\n            ",
   "describe": {
     "columns": [
       {
@@ -30,6 +30,11 @@
       },
       {
         "ordinal": 5,
+        "name": "year",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
         "name": "listing_type!: String",
         "type_info": {
           "Custom": {
@@ -48,7 +53,7 @@
         }
       },
       {
-        "ordinal": 6,
+        "ordinal": 7,
         "name": "condition!: String",
         "type_info": {
           "Custom": {
@@ -65,22 +70,22 @@
         }
       },
       {
-        "ordinal": 7,
+        "ordinal": 8,
         "name": "location",
         "type_info": "Text"
       },
       {
-        "ordinal": 8,
+        "ordinal": 9,
         "name": "is_active",
         "type_info": "Bool"
       },
       {
-        "ordinal": 9,
+        "ordinal": 10,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 10,
+        "ordinal": 11,
         "name": "updated_at",
         "type_info": "Timestamptz"
       }
@@ -96,6 +101,7 @@
       false,
       true,
       false,
+      true,
       false,
       false,
       false,
@@ -104,5 +110,5 @@
       false
     ]
   },
-  "hash": "09a1b0b7d20f5b3b35366ba1e4086799c58f04481f0642adf7db794eeca0b4b6"
+  "hash": "58d09c6665fce471ed64d179793387ad830b9c589d6a5132b555b94e24907348"
 }
