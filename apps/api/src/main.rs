@@ -10,7 +10,7 @@ use application::{
         forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
         reset_password::ResetPasswordUseCase, verify_reset_token::VerifyResetTokenUseCase,
     },
-    listing::create_listing::CreateListingUseCase,
+    listing::{create_listing::CreateListingUseCase, search_listing::SearchListingsUseCase},
     user::get_user::GetUserUseCase,
 };
 use axum::{
@@ -22,6 +22,7 @@ use axum::{
     routing::{get, post},
 };
 use infrastructure::{
+    elasticsearch::{create_client, listing_search::ListingSearch},
     email::resend::ResendEmailService,
     jwt::JwtService,
     kafka::producer::KafkaProducer,
@@ -70,6 +71,8 @@ async fn main() {
     let resend_api_key = std::env::var("RESEND_API_KEY").expect("RESEND_API_KEY must be set");
     let kafka_brokers =
         std::env::var("KAFKA_BROKERS").unwrap_or_else(|_| "localhost:9092".to_string());
+    let es_url =
+        std::env::var("ELASTICSEARCH_URL").unwrap_or_else(|_| "http://localhost:9200".to_string());
 
     // Create postgres pool
     let pool = PgPoolOptions::new()
@@ -77,6 +80,9 @@ async fn main() {
         .connect(&database_url)
         .await
         .expect("Failed to connect to database");
+
+    // Create elasticsearch client
+    let es_client = create_client(&es_url);
 
     tracing::info!("Connected to database");
 
@@ -86,6 +92,7 @@ async fn main() {
     let email_service = Arc::new(ResendEmailService::new(resend_api_key, app_email));
     let listing_repository = Arc::new(PgListingRepository::new(pool.clone()));
     let kafka_producer = Arc::new(KafkaProducer::new(&kafka_brokers));
+    let listing_search = Arc::new(ListingSearch::new(es_client));
 
     let state = AppState {
         auth: Arc::new(AuthContainer {
@@ -109,6 +116,7 @@ async fn main() {
         }),
         listings: Arc::new(ListingContainer {
             create: CreateListingUseCase::new(listing_repository.clone(), kafka_producer.clone()),
+            search: SearchListingsUseCase::new(listing_search.clone()),
         }),
     };
 
@@ -139,6 +147,7 @@ async fn main() {
         )
         .route("/auth/reset-password", post(routes::auth::reset_password))
         .route("/users/{id}", get(routes::users::get_user))
+        .route("/listings", get(routes::listing::search_listings))
         .merge(protected);
 
     // Build axum application

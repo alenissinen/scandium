@@ -1,5 +1,6 @@
 use super::document::ListingDocument;
 use async_trait::async_trait;
+use serde::Serialize;
 
 pub struct ListingSearchParams {
     pub query: Option<String>,
@@ -11,6 +12,7 @@ pub struct ListingSearchParams {
     pub per_page: u32,
 }
 
+#[derive(Serialize)]
 pub struct ListingSearchResult {
     pub listings: Vec<ListingDocument>,
     pub total: u64,
