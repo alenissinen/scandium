@@ -8,13 +8,18 @@ use rdkafka::{
     ClientConfig, Message,
     consumer::{CommitMode, Consumer, StreamConsumer},
 };
+use tracing_subscriber::EnvFilter;
 
 use crate::events::IncomingEvent;
 
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")),
+        )
+        .init();
 
     // Env variables
     let kafka_brokers =
@@ -35,7 +40,7 @@ async fn main() {
     // Create async Kafka consumer
     let consumer: StreamConsumer = ClientConfig::new()
         .set("bootstrap.servers", &kafka_brokers)
-        .set("group.id", "scandium-consumer")
+        .set("group.id", "scandium-consumer-v1")
         .set("auto.offset.reset", "earliest")
         .set("enable.auto.commit", "false")
         .create()
