@@ -1,3 +1,4 @@
+pub mod document;
 pub mod entity;
 pub mod error;
 pub mod events;
