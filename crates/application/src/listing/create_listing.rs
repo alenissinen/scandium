@@ -3,6 +3,7 @@ use std::sync::Arc;
 use domain::listing::{
     entity::{Listing, ListingCondition, ListingType},
     error::ListingError,
+    events::ListingEventPublisher,
     repository::{CreateListingInput, ListingRepository},
 };
 use uuid::Uuid;
@@ -12,6 +13,7 @@ pub struct CreateListingRequest {
     pub title: String,
     pub description: Option<String>,
     pub price: i32,
+    pub year: Option<i32>,
     pub listing_type: ListingType,
     pub condition: ListingCondition,
     pub location: String,
@@ -20,11 +22,18 @@ pub struct CreateListingRequest {
 #[derive(Clone)]
 pub struct CreateListingUseCase {
     listing_repo: Arc<dyn ListingRepository>,
+    event_publisher: Arc<dyn ListingEventPublisher>,
 }
 
 impl CreateListingUseCase {
-    pub fn new(listing_repo: Arc<dyn ListingRepository>) -> Self {
-        Self { listing_repo }
+    pub fn new(
+        listing_repo: Arc<dyn ListingRepository>,
+        event_publisher: Arc<dyn ListingEventPublisher>,
+    ) -> Self {
+        Self {
+            listing_repo,
+            event_publisher,
+        }
     }
 
     pub async fn execute(&self, req: CreateListingRequest) -> Result<Listing, ListingError> {
@@ -36,6 +45,7 @@ impl CreateListingUseCase {
             return Err(ListingError::InvalidPrice);
         }
 
+        // Save listing to database
         let listing = self
             .listing_repo
             .create(CreateListingInput {
@@ -43,11 +53,18 @@ impl CreateListingUseCase {
                 title: req.title,
                 description: req.description,
                 price: req.price,
+                year: req.year,
                 listing_type: req.listing_type,
                 condition: req.condition,
                 location: req.location,
             })
             .await?;
+
+        // Send Kafka event, in case it fails, just log the error since the listing
+        // has already been saved to db
+        if let Err(e) = self.event_publisher.publish_listing_created(&listing).await {
+            tracing::error!(listing_id = %listing.id, error = %e, "Failed to publish listing created event");
+        }
 
         Ok(listing)
     }
@@ -69,6 +86,8 @@ mod tests {
         should_fail: bool,
     }
 
+    struct MockEventPublisher;
+
     #[async_trait]
     impl ListingRepository for MockListingRepo {
         async fn create(&self, input: CreateListingInput) -> Result<Listing, ListingError> {
@@ -81,6 +100,7 @@ mod tests {
                 title: input.title,
                 description: input.description,
                 price: input.price,
+                year: input.year,
                 listing_type: input.listing_type,
                 condition: input.condition,
                 location: input.location,
@@ -100,8 +120,18 @@ mod tests {
         }
     }
 
+    #[async_trait]
+    impl ListingEventPublisher for MockEventPublisher {
+        async fn publish_listing_created(&self, _: &Listing) -> Result<(), String> {
+            Ok(())
+        }
+    }
+
     fn create_use_case(should_fail: bool) -> CreateListingUseCase {
-        CreateListingUseCase::new(Arc::new(MockListingRepo { should_fail }))
+        CreateListingUseCase::new(
+            Arc::new(MockListingRepo { should_fail }),
+            Arc::new(MockEventPublisher),
+        )
     }
 
     fn valid_request() -> CreateListingRequest {
@@ -110,6 +140,7 @@ mod tests {
             title: "Atomic Redster X9 170cm".to_string(),
             description: None,
             price: 485,
+            year: Some(2022),
             listing_type: ListingType::Skis,
             condition: ListingCondition::New,
             location: "Helsinki".to_string(),

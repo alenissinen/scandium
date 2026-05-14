@@ -11,6 +11,7 @@ pub struct CreateListingInput {
     pub title: String,
     pub description: Option<String>,
     pub price: i32,
+    pub year: Option<i32>,
     pub listing_type: ListingType,
     pub condition: ListingCondition,
     pub location: String,

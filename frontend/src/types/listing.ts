@@ -1,6 +1,6 @@
 export const listingCategories = [
   "skis",
-  "snowboards",
+  "snowboard",
   "boots",
   "bindings",
   "clothing",
@@ -18,9 +18,9 @@ export type Listing = {
   title: string;
   price: number;
   condition: ListingCondition;
-  category: ListingCategory;
-  year?: number;
+  listing_type: ListingCategory;
   location: string;
+  year?: number;
   image_url?: string;
   created_at: string;
 };

@@ -5,7 +5,7 @@ use application::{
         forgot_password::ForgotPasswordUseCase, login::LoginUseCase, register::RegisterUseCase,
         reset_password::ResetPasswordUseCase, verify_reset_token::VerifyResetTokenUseCase,
     },
-    listing::create_listing::CreateListingUseCase,
+    listing::{create_listing::CreateListingUseCase, search_listing::SearchListingsUseCase},
     user::get_user::GetUserUseCase,
 };
 use infrastructure::jwt::JwtService;
@@ -35,4 +35,5 @@ pub struct UserContainer {
 #[derive(Clone)]
 pub struct ListingContainer {
     pub create: CreateListingUseCase,
+    pub search: SearchListingsUseCase,
 }

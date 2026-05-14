@@ -19,3 +19,4 @@ thiserror = { workspace = true }
 argon2 = { workspace = true }
 jsonwebtoken = { workspace = true }
 resend-rs = { workspace = true }
+tracing = { workspace = true }
