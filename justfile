@@ -2,7 +2,7 @@
 dev:
     tmux new-session -d -s scandium -n api 'cargo run -p api'
     tmux new-window -t scandium -n consumer 'cargo run -p consumer'
-    tmux new-window -t scandium -n frontend 'cd frontend && npm run dev'
+    tmux new-window -t scandium -n frontend 'cd frontend && npm run dev -- --port 3000'
     tmux attach -t scandium
 
 # Docker-compose
@@ -17,7 +17,7 @@ consumer:
     cargo run -p consumer
 
 frontend:
-    cd frontend && npm run dev
+    cd frontend && npm run dev -- --port 3000
 
 # Database
 migrate:
