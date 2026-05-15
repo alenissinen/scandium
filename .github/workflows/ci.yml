@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: DeterminateSystems/nix-installer-action@v16
+      - uses: DeterminateSystems/nix-installer-action@v22
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Check formatting
         run: nix develop --command cargo fmt --check
@@ -34,9 +34,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: DeterminateSystems/nix-installer-action@v16
+      - uses: DeterminateSystems/nix-installer-action@v22
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Install dependencies
         run: nix develop --command bash -c "cd frontend && npm ci --ignore-scripts"
