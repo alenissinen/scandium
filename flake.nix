@@ -41,6 +41,7 @@
             # Dev tools
             docker-compose
             just
+            tmux
           ];
 
           # Env variables for cargo
@@ -49,6 +50,11 @@
             export OPENSSL_DIR="${pkgs.openssl.dev}"
             export OPENSSL_LIB_DIR="${pkgs.openssl.out}/lib"
             export OPENSSL_INCLUDE_DIR="${pkgs.openssl.dev}/include"
+
+            if [ -f .env ]; then
+                export $(cat .env | grep -v '^#' | xargs)
+            fi
+
             echo "Scandium dev shell"
             echo "Rust: $(rustc --version)"
             echo "Node: $(node --version)"
