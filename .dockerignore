@@ -1,0 +1,9 @@
+target/
+node_modules/
+.next/
+.git/
+frontend/.next/
+frontend/node_modules/
+*.md
+.env
+.env.*
