@@ -1,8 +1,9 @@
 [![CI](https://github.com/alenissinen/scandium/actions/workflows/ci.yml/badge.svg)](https://github.com/alenissinen/scandium/actions/workflows/ci.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
+
 # Scandium
 
-Scandium (named after the chemical element) is a modern customer-to-customer marketplace for buying and selling winter sports equipment (skis, snowboards, boots, bindings, avalanche gear etc.) with powerful filters, real-time messaging and a modern UI combined with powerful backend.
+Scandium (named after the chemical element) is a modern customer-to-customer marketplace for buying and selling winter sports equipment (skis, snowboards, boots, bindings, avalanche gear etc.) with powerful filters, real-time messaging and a modern UI combined with scalable backend.
 
 ## Tech stack
 
@@ -14,7 +15,7 @@ Scandium (named after the chemical element) is a modern customer-to-customer mar
 | Search           | Elasticsearch                                |
 | Event streaming  | Kafka                                        |
 | Cache / Sessions | Redis                                        |
-| Infrastructure   | Docker Compose, Nginx, GitHub Actions        |
+| Infrastructure   | Docker, Nix, GitHub Actions                  |
 
 ## Workspace Structure
 
@@ -27,66 +28,62 @@ Scandium (named after the chemical element) is a modern customer-to-customer mar
 | `crates/application`    | Use cases -> combines domain and infrastructure |
 | `crates/shared`         | Shared types, errors, pagination                |
 | `frontend/`             | Next.js frontend                                |
+| `scripts`               | Utility scripts for development                 |
+| `migrations`            | SQLx migrations                                 |
 
 ## Development setup
 
 ### Prerequisites
 
-- Rust (latest stable)
+- [Nix](https://determinate.systems/posts/determinate-nix-installer) (recommended)
 - Docker + Docker Compose
-- Resend.com api key
+- Resend API key (for password reset emails)
 
-### Setup
+### Setup with Nix
+
+```bash
+nix develop
+just setup # starts docker, runs migrations, creates kafka topics
+just dev # starts api, consumer and frontend in a tmux session
+```
+
+### Setup without Nix
 
 ```bash
 docker-compose up -d
 sqlx migrate run
-```
-
-### Run the project
-
-```bash
-# Start api
+./scripts/create_kafka_topics.sh
 cargo run -p api
-
-# Start frontend
 cd frontend && npm run dev
 ```
 
-### After pulling recent changes
+## Available Commands
 
-If migrations have changed:
+| Command             | Description                         |
+| ------------------- | ----------------------------------- |
+| `just dev`          | Start all services in tmux          |
+| `just api`          | Start API                           |
+| `just consumer`     | Start Kafka consumer                |
+| `just frontend`     | Start frontend                      |
+| `just setup`        | Setup new environment               |
+| `just migrate`      | Run database migrations             |
+| `just topics`       | Create Kafka topics                 |
+| `just test`         | Run all tests                       |
+| `just seed <token>` | Seed database with example listings |
+
+## Docker Images
+
+Images are published to GitHub Container Registry on every merge to `main`
 
 ```bash
-cargo sqlx migrate run
+docker pull ghcr.io/alenissinen/scandium-api:latest
+docker pull ghcr.io/alenissinen/scandium-consumer:latest
+docker pull ghcr.io/alenissinen/scandium-frontend:latest
 ```
 
-If queries have changed:
+## Contributing
 
-```bash
-cargo sqlx prepare --workspace
-```
-
-### Before committing
-
-```bash
-# Make sure everything compiles
-cargo check --workspace
-
-# Lint
-cargo clippy --workspace -- -D warnings
-
-# Format
-cargo fmt
-
-# Lint and format frontend
-cd frontend && npm run check
-
-```
-
-### Git hooks
-
-Git hooks are managed via lefthook. Rust hooks (clippy, fmt) run automatically on commit. See more in [frontend README](frontend/README.md)
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 ## License
 
