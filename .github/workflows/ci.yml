@@ -10,6 +10,9 @@ jobs:
   backend:
     name: Backend
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
@@ -31,6 +34,9 @@ jobs:
   frontend:
     name: Frontend
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
