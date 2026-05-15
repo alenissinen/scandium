@@ -2,7 +2,7 @@
 
 set -e
 
-KAFKA_CONTAINER=${KAFKA_CONTAINER:-"scandium_kafka_1"}
+KAFKA_CONTAINER=${KAFKA_CONTAINER:-"scandium-kafka-1"}
 BOOTSTRAP_SERVER=${BOOTSTRAP_SERVER:-"localhost:9092"}
 
 create_topic() {
