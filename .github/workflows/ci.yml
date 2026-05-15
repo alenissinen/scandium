@@ -18,7 +18,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@v22
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - uses: DeterminateSystems/flakehub-cache-action@main
 
       - name: Check formatting
         run: nix develop --command cargo fmt --check
@@ -42,7 +42,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@v22
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - uses: DeterminateSystems/flakehub-cache-action@main
 
       - name: Install dependencies
         run: nix develop --command bash -c "cd frontend && npm ci --ignore-scripts"
