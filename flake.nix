@@ -37,7 +37,6 @@
 
             # Node.js
             nodejs_24
-            npm
 
             # Dev tools
             docker-compose
