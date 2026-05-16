@@ -18,7 +18,8 @@ type SearchParams = {
 };
 
 async function fetchListings(params: SearchParams) {
-  const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/listings`);
+  const apiUrl = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL;
+  const url = new URL(`${apiUrl}/api/v1/listings`);
 
   if (params.q) url.searchParams.set("q", params.q);
   if (params.listing_type) url.searchParams.set("listing_type", params.listing_type);
