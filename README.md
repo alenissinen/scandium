@@ -54,6 +54,7 @@ docker-compose up -d
 sqlx migrate run
 ./scripts/create_kafka_topics.sh
 cargo run -p api
+cargo run -p consumer
 cd frontend && npm run dev
 ```
 
