@@ -47,7 +47,7 @@ jobs:
             type=sha,prefix=sha-
 
       - name: Build and push API
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/rust.Dockerfile
@@ -58,7 +58,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and push Consumer
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/rust.Dockerfile
@@ -97,7 +97,7 @@ jobs:
             type=sha,prefix=sha-
 
       - name: Build and push Frontend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/frontend.Dockerfile
