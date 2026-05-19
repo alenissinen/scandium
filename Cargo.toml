@@ -25,7 +25,7 @@ sqlx = { version = "0.8.6", features = [
     "uuid",
     "chrono",
 ] }
-redis = { version = "1.2.0", features = ["tokio-comp"] }
+redis = { version = "1.2.1", features = ["tokio-comp"] }
 rdkafka = { version = "0.39.0", features = ["cmake-build"] }
 elasticsearch = "8.5.0-alpha.1"
 jsonwebtoken = { version = "10.3.0", features = ["aws_lc_rs"] }
