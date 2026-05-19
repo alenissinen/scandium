@@ -30,7 +30,7 @@ jobs:
 
       - name: API metadata
         id: api-meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/scandium-api
           tags: |
@@ -39,7 +39,7 @@ jobs:
 
       - name: Consumer metadata
         id: consumer-meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/scandium-consumer
           tags: |
@@ -89,7 +89,7 @@ jobs:
 
       - name: Metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/scandium-frontend
           tags: |
